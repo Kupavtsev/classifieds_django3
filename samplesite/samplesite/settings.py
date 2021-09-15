@@ -37,10 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bboard.apps.BboardConfig',
+
+    # debug:
+    'debug_toolbar',
+
+    # my apps
+    'bboard',
+    # 'bboard.apps.BboardConfig',
 ]
 
 MIDDLEWARE = [
+    # debug:
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
