@@ -1,7 +1,22 @@
 from django.db import models
+from django.db.models.enums import Choices
 
 
 class Bb(models.Model):
+
+    class Kinds(models.TextChoices):
+                    BUY = 'b', 'Куплю'
+                    SELL = 's', 'Продам'
+                    EXCHANGE = 'с', 'Обменяю'
+                    RENT = 'r'
+                    __empty__ = 'Выберите тип публикуемого объявления'
+
+    kind        = models.CharField(
+                            max_length=1,
+                            choices=Kinds.choices,
+                            default=Kinds.SELL
+    )
+
     title       = models.CharField(
                             max_length=50,
                             verbose_name='Товар'
