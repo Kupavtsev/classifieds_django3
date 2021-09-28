@@ -11,44 +11,14 @@ class Bb(models.Model):
                     RENT = 'r'
                     __empty__ = 'Выберите тип публикуемого объявления'
 
-    kind        = models.CharField(
-                            max_length=1,
-                            choices=Kinds.choices,
-                            default=Kinds.SELL
-    )
-
-    title       = models.CharField(
-                            max_length=50,
-                            verbose_name='Товар'
-                            )
-    content     = models.TextField(
-                            null=True,                  # В необязательное поле можно занести пустое значение
-                            blank=True,                 
-                            verbose_name='Описание'
-                            )
-    
-    price       = models.FloatField(
-                            null=True,
-                            blank=True,
-                            verbose_name="Цена"
-                            )
-    published   = models.DateTimeField(
-                            auto_now_add=True, 
-                            db_index=True,              # Индекс по текущему
-                            verbose_name="Опубликовано"
-                            )
-    changed   = models.DateTimeField(
-                            auto_now=True, 
-                            db_index=True,              # Индекс по текущему
-                            verbose_name="Изменено"
-                            )
-    
-    rubric      = models.ForeignKey(                    # Foreign Keys
-                            'Rubric',
-                            null=True,
-                            on_delete=models.PROTECT,
-                            verbose_name='Рубрика'
-                            )
+    kind        = models.CharField(max_length=1,choices=Kinds.choices,default=Kinds.SELL)
+    title       = models.CharField(max_length=50, verbose_name='Товар')
+    # В необязательное поле можно занести пустое значение: null/blank = True
+    content     = models.TextField(null=True, blank=True, verbose_name='Описание')
+    price       = models.FloatField(null=True, blank=True, verbose_name="Цена")
+    published   = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name="Опубликовано")
+    changed     = models.DateTimeField(auto_now=True, db_index=True, verbose_name="Изменено")
+    rubric      = models.ForeignKey('Rubric', null=True, on_delete=models.PROTECT, verbose_name='Рубрика')
 
 
     class Meta:

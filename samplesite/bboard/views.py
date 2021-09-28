@@ -1,9 +1,9 @@
 from django.views.generic.edit import CreateView
 from django.shortcuts   import render
-from django.template    import loader
+# from django.template    import loader
 from django.urls        import reverse_lazy
 
-from django.http        import HttpResponse
+# from django.http        import HttpResponse
 
 from .models            import Bb, Rubric
 from .forms             import BbForm
