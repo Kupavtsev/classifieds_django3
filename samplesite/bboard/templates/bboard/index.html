@@ -8,7 +8,7 @@
     <p>{{ bb.content }}</p>
     <p><a href="/bboard/{{ bb.rubric.pk }}/">
             {{ bb.rubric.name }}</a></p>
-    <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
+    <p>Опубликовано: {{ bb.published|date:"d.m.Y H:i:s" }}</p>
 </div>
 
 {% endfor %}

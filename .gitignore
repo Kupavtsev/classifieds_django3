@@ -2,3 +2,5 @@ venv_classd/
 samplesite/bboard/__pycache__
 samplesite/bboard/migrations/__pycache__
 samplesite/samplesite/__pycache__
+
+cmd.exe

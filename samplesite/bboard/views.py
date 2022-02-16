@@ -44,6 +44,8 @@ class BbCreateView(CreateView):
     # success_url     = '/bboard/'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs) # получаем контекст шаблона от метода базового класса
+        print("bboard/views.py - context = super().get_context_data(**kwargs): \n", context)
         context['rubrics'] = Rubric.objects.all()
+        print("bboard/views.py - context['rubrics'] = Rubric.objects.all(): \n", context)
         return context
