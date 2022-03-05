@@ -1,3 +1,5 @@
+import http
+from http.client import HTTPResponse
 from django.views.generic.edit import CreateView
 from django.shortcuts   import render
 # from django.template    import loader
@@ -24,10 +26,14 @@ from .forms             import BbForm
 
 # This is Third version III
 def index(request):
-    bbs             = Bb.objects.all()
-    rubrics         = Rubric.objects.all()
-    context         = {'bbs': bbs, 'rubrics': rubrics}
-    return render(request, 'bboard/index.html', context)
+    # В зависимоти от контекста запрома, render ведет себя по разному
+    if request.method == 'GET':     # не обязательно
+        bbs             = Bb.objects.all()
+        rubrics         = Rubric.objects.all()
+        context         = {'bbs': bbs, 'rubrics': rubrics}
+        return render(request, 'bboard/index.html', context)
+    else:
+        return HTTPResponse('Wrong method: 405')
 
 def by_rubric(request, rubric_id):
     bbs             = Bb.objects.filter(rubric=rubric_id)

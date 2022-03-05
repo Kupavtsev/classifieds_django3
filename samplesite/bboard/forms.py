@@ -8,5 +8,6 @@ class BbForm (ModelForm):
                 'title',
                 'content',
                 'price',
+                'kind',
                 'rubric'
                 )

@@ -5,7 +5,16 @@
 <h2>Добавление объявления</h2>
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+
+    {% for i in form %}
+    <div>
+        <p>{{ i.name }}</p>
+        {{ i }}
+    </div>
+    {% endfor %}
+
+    <!-- Форма отрендерит себя сама -->
+    <!-- {{ form.as_p }} -->
     <input type="submit" value="Добавить">
 </form>
 {% endblock %}

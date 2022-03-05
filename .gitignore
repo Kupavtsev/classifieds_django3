@@ -3,4 +3,6 @@ samplesite/bboard/__pycache__
 samplesite/bboard/migrations/__pycache__
 samplesite/samplesite/__pycache__
 
+samplesite/samplesite/bboard/migrations
+
 cmd.exe
