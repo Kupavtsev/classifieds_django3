@@ -1,4 +1,4 @@
-header h1 {
+header hl {
     font-size: 40pt;
     text-transform: uppercase;
     text-align: center;
@@ -17,5 +17,4 @@ nav a {
     }
 section {
     margin-left: 170px;
-}
-    
+} 

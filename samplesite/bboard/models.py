@@ -49,7 +49,7 @@ class Rubric(models.Model) :
         return f'/bboard/{self.pk}'
 
     name = models.CharField(max_length=20, db_index=True, verbose_name='Название')
-    some = models.CharField(max_length=4, verbose_name='Some test') # ??????
+    # some = models.CharField(max_length=4, verbose_name='Some test') # ??????
     show = models.BooleanField(default=True)    # Не дает возможность выбрать рубрику False
 
     def __str__(self):
