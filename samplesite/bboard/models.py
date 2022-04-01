@@ -1,11 +1,18 @@
+from django.core.exceptions import ValidationError
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.core import validators
 
-def get_min_length():
-    min_length = 5
+# My validators
+def get_min_length():        # It works, but it doesn't show any messages!!!
+    min_length = 5           # But before testapp, it works correctly
     return min_length
 
+def validate_even(val):     # It works, but it doesn't show any messages!!!
+    if val % 2 != 0:
+        raise ValidationError(f'Число {val} нечетное', code='odd')
+
+# Main class of ads
 class Bb(models.Model):
 
     class Kinds(models.TextChoices):
@@ -15,18 +22,33 @@ class Bb(models.Model):
                     RENT = 'r'
                     __empty__ = 'Выберите тип публикуемого объявления'
 
-    kind        = models.CharField(max_length=1,choices=Kinds.choices,default=Kinds.SELL)
-    title       = models.CharField(max_length=50, verbose_name='Товар', 
-                                    validators=[validators.MinLengthValidator(get_min_length)])
+    kind = models.CharField(
+        max_length=1,choices=Kinds.choices,default=Kinds.SELL
+        )
+    title = models.CharField(
+        max_length=50, verbose_name='Товар', 
+        validators=[validators.MinLengthValidator(get_min_length)],
+        # error_messages={'invalid': 'Минимальная длинна 5, максимальная 50'}   # it doesn't display any
+                                    )
     # В необязательное поле можно занести пустое значение: null/blank = True
-    content     = models.TextField(null=True, blank=True, verbose_name='Описание')
-    price       = models.FloatField(null=True, blank=True, verbose_name="Цена")
-    published   = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name="Опубликовано")
-    changed     = models.DateTimeField(auto_now=True, db_index=True, verbose_name="Изменено")
-    rubric      = models.ForeignKey('Rubric', null=True, on_delete=models.PROTECT, verbose_name='Рубрика',
-                                     limit_choices_to={'show': True})
-                                    #  limit_choices_to в форме работает но отображается на сайте
-
+    content = models.TextField(
+        null=True, blank=True, verbose_name='Описание'
+        )
+    price = models.FloatField(
+        null=True, blank=True, verbose_name="Цена",
+        validators=[validate_even]
+        )
+    published = models.DateTimeField(
+        auto_now_add=True, db_index=True, verbose_name="Опубликовано"
+        )
+    changed = models.DateTimeField(
+        auto_now=True, db_index=True, verbose_name="Изменено"
+        )
+    rubric = models.ForeignKey(
+        'Rubric', null=True, on_delete=models.PROTECT, verbose_name='Рубрика',
+        limit_choices_to={'show': True} #  limit_choices_to в форме работает но отображается на сайте
+        )
+                                    
 
     class Meta:
         verbose_name_plural = 'Объявления'
@@ -48,7 +70,9 @@ class Rubric(models.Model) :
         # return "/bboard/%s" % self.pk
         return f'/bboard/{self.pk}'
 
-    name = models.CharField(max_length=20, db_index=True, verbose_name='Название')
+    name = models.CharField(
+        max_length=20, db_index=True, verbose_name='Название'
+        )
     # some = models.CharField(max_length=4, verbose_name='Some test') # ??????
     show = models.BooleanField(default=True)    # Не дает возможность выбрать рубрику False
 
@@ -62,11 +86,11 @@ class Rubric(models.Model) :
 
 
 
-class AdvUser(models.Model):
-    is_activated = models.BooleanField(default=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+# class AdvUser(models.Model):
+#     is_activated = models.BooleanField(default=True)
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    class Meta:
-        verbose_name_plural = 'Активированные'
-        verbose_name        = 'Активированный'
-        ordering            = ['is_activated']
+#     class Meta:
+#         verbose_name_plural = 'Активированные'
+#         verbose_name        = 'Активированный'
+#         ordering            = ['is_activated']
