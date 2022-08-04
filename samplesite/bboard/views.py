@@ -1,7 +1,10 @@
-from http.client import HTTPResponse
+from multiprocessing import context
 from django.views.generic.edit import CreateView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
+
+from http.client import HTTPResponse
 from django.shortcuts   import render
 # from django.template    import loader
 from django.urls        import reverse_lazy
@@ -54,6 +57,21 @@ class BbByRubricView(TemplateView):
         context['rubrics'] = Rubric.objects.all()
         context['current_rubric'] = Rubric.objects.get(pk=context['rubric_id'])
         return context
+
+class BbByRubricViewListView(ListView):
+    template_name = 'bboard/by_rubric.html'
+    context_object_name = 'bbs' # будет сохранен извлеченный набор записей
+
+    def get_queryset(self):
+        return Bb.objects.filter(rubric=self.kwargs['rubric_id'])
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rubrics'] = Rubric.objects.all()
+        context['current_rubric'] = Rubric.objects.get(pk=self.kwargs['rubric_id'])
+        return context
+
+
 
 class BbDetailView(DetailView):
     model = Bb
