@@ -54,6 +54,7 @@ class Bb(models.Model):
         verbose_name_plural = 'Объявления'
         verbose_name        = 'Объявление'
         ordering            = ['-published']
+        # order_with_respect_to = 'rubric'  # there is no attriute for this parametr
         
         unique_together     = ('title', 'price')    # Ограничение на уже имеющуюся комбинацию в БД
         # constraints у меня не работает

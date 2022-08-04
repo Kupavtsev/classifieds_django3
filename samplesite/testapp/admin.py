@@ -18,8 +18,11 @@ class MachineAdmin(admin.ModelAdmin):
     def get_spares(self, obj):
         return "\n".join([s.name for s in obj.spares.all()])
 
+class AdvUserAdmin(admin.ModelAdmin):
+    list_display = ('is_activated', 'user')
 
-admin.site.register(AdvUser)
+
+admin.site.register(AdvUser, AdvUserAdmin)
 admin.site.register(Mesure, MesureAdmin)
 
 admin.site.register(TestID, TestIDAdmin)

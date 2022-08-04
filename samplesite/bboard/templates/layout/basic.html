@@ -14,8 +14,8 @@
         <link rel="stylesheet" type="text/css" href="{% static 'bboard/style.css' %}">
     </header>
     <nav>
-        <a href="{% url 'index' %}">Главная</а>
-        <a href="{% url 'add' %}">Добавить</а>
+        <a href="{% url 'index' %}"><b>Главная</b></а>
+        <a href="{% url 'add' %}"><b>Добавить</b></а>
 
         {% for rubric in rubrics %}
         <a href="{{ rubric.get_absolute_url }}">
