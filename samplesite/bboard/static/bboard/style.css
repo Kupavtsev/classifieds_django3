@@ -7,7 +7,7 @@ header hl {
 }
 nav {
     font-size: 16pt;
-    width: 150px;
+    width: 190px;
     float: left;
     }
 nav a {
@@ -16,5 +16,5 @@ nav a {
     text-decoration: none;
     }
 section {
-    margin-left: 170px;
+    margin-left: 210px;
 } 

@@ -1,8 +1,9 @@
-<<<<<<< HEAD
+# <<<<<<< HEAD
+from django.db.models import Count
 from http.client import HTTPResponse
-=======
-from multiprocessing import context
->>>>>>> b78ad940ae38c3590cac7ab901af08987ccfe3d9
+# =======
+# from multiprocessing import context
+# >>>>>>> b78ad940ae38c3590cac7ab901af08987ccfe3d9
 from django.views.generic.edit import CreateView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
@@ -32,13 +33,16 @@ from .forms             import BbForm
 #     context = {'bbs': bbs}
 #     return HttpResponse(template.render(context, request))
 
+RC = Rubric.objects.annotate(Count('bb'))
+
 # This is Third version III
 def index(request):
     # В зависимоти от контекста запрома, render ведет себя по разному
     if request.method == 'GET':     # не обязательно
+        # rc = Rubric.objects.annotate(Count('bb'))
         bbs             = Bb.objects.all()
         rubrics         = Rubric.objects.all()
-        context         = {'bbs': bbs, 'rubrics': rubrics}
+        context         = {'bbs': bbs, 'rubrics': rubrics, 'rc': RC}
         return render(request, 'bboard/index.html', context)
     else:
         return HTTPResponse('Wrong method: 405')
@@ -48,18 +52,19 @@ def by_rubric(request, rubric_id):
     bbs             = Bb.objects.filter(rubric=rubric_id)
     rubrics         = Rubric.objects.all()
     current_rubric  = Rubric.objects.get(pk=rubric_id)
-    context         = {'bbs': bbs, 'rubrics': rubrics, 'current_rubric': current_rubric}
+    context         = {'bbs': bbs, 'rubrics': rubrics, 'current_rubric': current_rubric, 'rc': RC}
     return render(request, 'bboard/by_rubric.html', context)
 
 # Class version by_rubric
 class BbByRubricView(TemplateView):
     template_name = 'bboard/by_rubric.html'
 
-    def get_context_data(self, **kwargs: any) -> dict[str, any]:
+    def get_context_data(self, **kwargs: any):
         context = super().get_context_data(**kwargs)
         context['bbs'] = Bb.objects.filter(rubric=context['rubric_id'])
-        context['rubrics'] = Rubric.objects.all()
+        # context['rubrics'] = Rubric.objects.all()
         context['current_rubric'] = Rubric.objects.get(pk=context['rubric_id'])
+        context['rc'] = RC
         return context
 
 class BbByRubricViewListView(ListView):
@@ -71,8 +76,9 @@ class BbByRubricViewListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['rubrics'] = Rubric.objects.all()
+        # context['rubrics'] = Rubric.objects.all()
         context['current_rubric'] = Rubric.objects.get(pk=self.kwargs['rubric_id'])
+        context['rc'] = RC
         return context
 
 
@@ -80,9 +86,10 @@ class BbByRubricViewListView(ListView):
 class BbDetailView(DetailView):
     model = Bb
 
-    def get_context_data(self, **kwargs: any) -> dict[str, any]:
+    def get_context_data(self, **kwargs: any):
         context = super().get_context_data(**kwargs)
-        context['rubrics'] = Rubric.objects.all()
+        # context['rubrics'] = Rubric.objects.all()
+        context['rc'] = RC
         return context
 
 class BbCreateView(CreateView):
@@ -93,7 +100,6 @@ class BbCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) # получаем контекст шаблона от метода базового класса
-        print("bboard/views.py - context = super().get_context_data(**kwargs): \n", context)
-        context['rubrics'] = Rubric.objects.all()
-        print("bboard/views.py - context['rubrics'] = Rubric.objects.all(): \n", context)
+        # context['rubrics'] = Rubric.objects.all()
+        context['rc'] = RC
         return context

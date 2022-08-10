@@ -15,14 +15,15 @@
     </header>
     <nav>
         <a href="{% url 'index' %}"><b>Главная</b></а>
-        <a href="{% url 'add' %}"><b>Добавить</b></а>
+            <a href="{% url 'add' %}"><b>Добавить</b></а>
 
-        {% for rubric in rubrics %}
-        <a href="{{ rubric.get_absolute_url }}">
-            <!-- <a href="{% url 'by_rubric' rubric.pk %}"> -->
-            {{ rubric.name }}
-        </a>
-        {% endfor %}
+
+                {% for rubric in rc %}
+                    <a href="{{ rubric.get_absolute_url }}">
+                        <!-- <a href="{% url 'by_rubric' rubric.pk %}"> -->
+                        {{ rubric.name }}: {{ rubric.bb__count }}
+                    </a>
+                {% endfor %}
     </nav>
     <section>
         {% block content %}
