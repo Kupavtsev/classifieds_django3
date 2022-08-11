@@ -1,9 +1,5 @@
-# <<<<<<< HEAD
-from django.db.models import Count
+from django.db.models import Count, OuterRef, Exists
 from http.client import HTTPResponse
-# =======
-# from multiprocessing import context
-# >>>>>>> b78ad940ae38c3590cac7ab901af08987ccfe3d9
 from django.views.generic.edit import CreateView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
@@ -11,7 +7,6 @@ from django.views.generic.list import ListView
 
 from http.client import HTTPResponse
 from django.shortcuts   import render
-# from django.template    import loader
 from django.urls        import reverse_lazy
 
 # from django.http        import HttpResponse
@@ -19,19 +14,11 @@ from django.urls        import reverse_lazy
 from .models            import Bb, Rubric
 from .forms             import BbForm
 
-# This is First version I
-# def index(request):
-#     s = 'Список объявлений\r\n\r\n\r\n'
-#     for bb in Bb.objects.order_by('-published'):
-#         s += bb.title + '\r\n' +  bb.content + '\r\n\r\n'
-#     return HttpResponse(s, content_type='text/plain; charset=utf-8')
 
-# This is Second version II
-# def index(request):
-#     template = loader.get_template('bboard/index.html')
-#     bbs = Bb.objects.order_by('-published')
-#     context = {'bbs': bbs}
-#     return HttpResponse(template.render(context, request))
+# SQL filters
+subquery = Exists(Bb.objects.filter(rubric=OuterRef('pk'), price__gt=100000))
+for r in Rubric.objects.annotate(is_expensive=subquery).filter(is_expensive=True): print(r.name)
+
 
 RC = Rubric.objects.annotate(Count('bb'))
 
