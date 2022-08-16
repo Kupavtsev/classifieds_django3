@@ -5,7 +5,7 @@ from django.core import validators
 
 # My validators
 def get_min_length():        # It works, but it doesn't show any messages!!!
-    min_length = 5           # But before testapp, it works correctly
+    min_length = 3           # But before testapp, it works correctly
     return min_length
 
 def validate_even(val):     # It works, but it doesn't show any messages!!!
@@ -36,7 +36,7 @@ class Bb(models.Model):
         )
     price = models.FloatField(
         null=True, blank=True, verbose_name="Цена",
-        validators=[validate_even]
+        # validators=[validate_even]
         )
     published = models.DateTimeField(
         auto_now_add=True, db_index=True, verbose_name="Опубликовано"

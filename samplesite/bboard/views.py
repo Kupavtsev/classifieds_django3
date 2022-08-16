@@ -1,13 +1,13 @@
 from django.db.models import Count, OuterRef, Exists
 from http.client import HTTPResponse
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
 from http.client import HTTPResponse
 from django.shortcuts   import render
-from django.urls        import reverse_lazy
+from django.urls        import reverse_lazy, reverse
 
 # from django.http        import HttpResponse
 
@@ -79,14 +79,61 @@ class BbDetailView(DetailView):
         context['rc'] = RC
         return context
 
+
+# FORM
 class BbCreateView(CreateView):
     template_name   = 'bboard/create.html'
     form_class      = BbForm
     success_url     = reverse_lazy('index')
-    # success_url     = '/bboard/'
+    # success_url     = '/bboard/detail/{id}'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) # получаем контекст шаблона от метода базового класса
         # context['rubrics'] = Rubric.objects.all()
+        context['rc'] = RC
+        return context
+
+class BbAddFormView(FormView):
+    template_name   = 'bboard/create.html'
+    form_class      = BbForm
+    initial = {'price': 0.0}
+
+    def get_context_data(self, *args, **kwargs: any):
+        context = super().get_context_data(*args, **kwargs)
+        context['rc'] = RC
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    # мы сохраняем полученную форму в object
+    def get_form(self, form_class = None):
+        self.object = super().get_form(form_class)
+        return self.object
+
+    # Получаем доступ к pk из object
+    def get_success_url(self):
+        return reverse('by_rubric',
+                    kwargs={'rubric_id': self.object.cleaned_data['rubric'].pk})
+
+# EDIT AD
+class BbUpdateView(UpdateView):
+    model = Bb
+    form_class = BbForm
+    # success_url = reverse_lazy('detail')
+    success_url = '/bboard/'
+
+    def get_context_data(self, *args, **kwargs: any):
+        context = super().get_context_data(*args, **kwargs)
+        context['rc'] = RC
+        return context
+
+class BbDeleteView(DeleteView):
+    model = Bb
+    success_url = '/bboard/'
+
+    def get_context_data(self, *args, **kwargs: any):
+        context = super().get_context_data(*args, **kwargs)
         context['rc'] = RC
         return context
