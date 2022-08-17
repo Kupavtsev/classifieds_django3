@@ -1,23 +1,22 @@
 {% extends "layout/basic.html" %}
 
+
+{% block title %}По годам{% endblock %}
+
 {% block content %}
 
-
+where is ???
 {% for bb in bbs %}
     <div>
         <!-- <h2>{{ bb.title }}</h2> -->
         <h2><a href="{% url 'detail' pk=bb.pk %}">{{ bb.title }}</a></h2>
         <p>{{ bb.content }}</p>
-        <p><a href="/bboard/{{ bb.rubric.pk }}/">
+        <p><a href="/bboard/{{ bb.rc.pk }}/">
                 {{ bb.rubric.name }}</a></p>
         <p>Опубликовано: {{ bb.published|date:"d.m.Y H:i:s" }}</p>
+        print('TEST', bb.rc.pk)
     </div>
 {% endfor %}
 
-<p>
-    {% for d in date_list %}
-    List: {{ d.year }}
-    {% endfor %}
-</p>
 
 {% endblock %}

@@ -2,8 +2,9 @@ from django.db.models import Count, OuterRef, Exists
 from http.client import HTTPResponse
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 from django.views.generic.base import TemplateView
-from django.views.generic.detail import DetailView
+from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.list import ListView
+from django.views.generic.dates import ArchiveIndexView, MonthArchiveView, YearArchiveView, DayArchiveView, DateDetailView
 
 from http.client import HTTPResponse
 from django.shortcuts   import render
@@ -34,6 +35,20 @@ def index(request):
     else:
         return HTTPResponse('Wrong method: 405')
 
+class BbIndexView(ArchiveIndexView):
+    model = Bb
+    date_field = 'published'
+    date_list_period: str = 'year'
+    template_name: str = 'bboard/index.html'
+    context_object_name: str = 'bbs'
+    allow_empty: bool = True
+
+    def get_context_data(self, *args, **kwargs: any):
+        context = super().get_context_data(*args, **kwargs)
+        context['rc'] = RC
+        return context
+
+
 # Func version by_rubric
 def by_rubric(request, rubric_id):
     bbs             = Bb.objects.filter(rubric=rubric_id)
@@ -43,16 +58,26 @@ def by_rubric(request, rubric_id):
     return render(request, 'bboard/by_rubric.html', context)
 
 # Class version by_rubric
-class BbByRubricView(TemplateView):
+# It mixdex class You Should avoid such a constructions!
+class BbByRubricView(SingleObjectMixin, ListView):
     template_name = 'bboard/by_rubric.html'
+    pk_url_kwarg: str = 'rubric_id'
+
+    # Извлекаем рубкиру с заданным ключом
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=Rubric.objects.all())
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs: any):
         context = super().get_context_data(**kwargs)
-        context['bbs'] = Bb.objects.filter(rubric=context['rubric_id'])
+        context['bbs'] = context['object_list']         # по умолчанию хранит записи из ListView
         # context['rubrics'] = Rubric.objects.all()
-        context['current_rubric'] = Rubric.objects.get(pk=context['rubric_id'])
+        context['current_rubric'] = self.object         # берем рубрику из get
         context['rc'] = RC
         return context
+
+    def get_queryset(self):
+        return self.object.bb_set.all()
 
 class BbByRubricViewListView(ListView):
     template_name = 'bboard/by_rubric.html'
@@ -122,7 +147,7 @@ class BbUpdateView(UpdateView):
     model = Bb
     form_class = BbForm
     # success_url = reverse_lazy('detail')
-    success_url = '/bboard/'
+    success_url = '/bboard/detail/{id}'
 
     def get_context_data(self, *args, **kwargs: any):
         context = super().get_context_data(*args, **kwargs)
@@ -137,3 +162,61 @@ class BbDeleteView(DeleteView):
         context = super().get_context_data(*args, **kwargs)
         context['rc'] = RC
         return context
+
+
+# DATES
+class BbMonthArchiveView(MonthArchiveView):
+    model = Bb
+    date_field: str = 'published'
+    month_format: str = '%m'            # порядковый номер месяца
+
+    context_object_name: str = 'bbs'
+    allow_empty: bool = True
+
+
+    def get_context_data(self, *args, **kwargs: any):
+        context = super().get_context_data(*args, **kwargs)
+        context['rc'] = RC
+        return context
+
+
+class BbYearArchiveView(YearArchiveView):
+    model = Bb
+    date_field: str = 'published'
+    year_format: str = '%Y'            # порядковый номер месяца
+
+    context_object_name: str = 'bbs'
+    allow_empty: bool = True
+
+
+    def get_context_data(self, *args, **kwargs: any):
+        context = super().get_context_data(*args, **kwargs)
+        context['rc'] = RC
+        return context
+
+
+class BbDayArchiveView(DayArchiveView):
+    context_object_name: str = 'bbs'
+    allow_empty: bool = True
+
+
+    def get_context_data(self, *args, **kwargs: any):
+        context = super().get_context_data(*args, **kwargs)
+        context['rc'] = RC
+        return context
+
+# this is does not work!!!
+class BbDayDetailView(DateDetailView):
+    model = Bb
+    date_field: str = 'published'
+    year_format: str = '%m'            # порядковый номер месяца
+
+    # context_object_name: str = 'bbs'
+    # allow_empty: bool = True
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['rc'] = RC
+        return context
+
+    
