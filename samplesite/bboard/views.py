@@ -29,6 +29,7 @@ def index(request):
     if request.method == 'GET':     # не обязательно
         # rc = Rubric.objects.annotate(Count('bb'))
         bbs             = Bb.objects.all()
+        # bbs             = None
         rubrics         = Rubric.objects.all()
         context         = {'bbs': bbs, 'rubrics': rubrics, 'rc': RC}
         return render(request, 'bboard/index.html', context)
@@ -41,6 +42,7 @@ class BbIndexView(ArchiveIndexView):
     date_list_period: str = 'year'
     template_name: str = 'bboard/index.html'
     context_object_name: str = 'bbs'
+    # context_object_name: str = ''
     allow_empty: bool = True
 
     def get_context_data(self, *args, **kwargs: any):

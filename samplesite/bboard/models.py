@@ -63,6 +63,11 @@ class Bb(models.Model):
         #         price__lte=10000),
         #         name='%(app_label)s_%(class)s_price_constraint'),
         # )
+    def title_and_price(self):
+        if self.price:
+            return f'{self.title}: {self.price} rub.'
+        else:
+            return self.title
 
 
 class Rubric(models.Model) :

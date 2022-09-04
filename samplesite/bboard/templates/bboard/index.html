@@ -2,18 +2,34 @@
 
 {% block content %}
 
+{# This is comments for code!? #}
+{% if bbs %}
 
-{% for bb in bbs %}
-    <div>
-        <!-- <h2>{{ bb.title }}</h2> -->
-        <h2><a href="{% url 'detail' pk=bb.pk %}">{{ bb.title }}</a></h2>
-        <p>{{ bb.content }}</p>
-        <p><a href="/bboard/{{ bb.rubric.pk }}/">
-                {{ bb.rubric.name }}</a></p>
-        <p>Опубликовано: {{ bb.published|date:"d.m.Y H:i:s" }}</p>
-    </div>
-{% endfor %}
+{% with bb_count=bbs.count %}
+{% if bb_count > 0 %}
+<p>Всего {{ bb_count }} объявлений.</p>
+{% endif %}
+{% endwith %}
 
+    {% for bb in bbs %}
+        {% cycle 'bb1' 'bb2' 'bb3' as currentclass %}
+        <div>
+            <!-- <h2>{{ bb.title }}</h2> -->
+            <p># {{ forloop.counter }}</p>
+            <h2 class={{currentclass}}><a href="{% url 'detail' pk=bb.pk %}">{{ bb.title_and_price }}</a></h2>
+            <p>{{ bb.content }}</p>
+            <p><a href="/bboard/{{ bb.rubric.pk }}/">
+                    {{ bb.rubric.name }}</a></p>
+            {% firstof bb.phone bb.email 'Контакт не указан' %}
+            <p class={{currentclass}}>Опубликовано: {{ bb.published|date:"DATETIME_FORMAT" }}</p>
+            <!-- <p class={{currentclass}}>Опубликовано: {{ bb.published|date:"d.m.Y H:i:s" }}</p> -->
+            <p>Прошло {{ bb.published|timesince }}</p>
+        </div>
+    {% endfor %}
+
+{% else %}
+        <p><h3>Объявлений нет</h3></p>
+{% endif %}
 <p>
     {% for d in date_list %}
     List: {{ d.year }}
