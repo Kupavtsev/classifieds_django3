@@ -24,6 +24,12 @@
                         {{ rubric.name }}: {{ rubric.bb__count }}
                     </a>
                 {% endfor %}
+
+        {% with bb_count=bbstotal.count %}
+            {% if bb_count > 0 %}
+                <p>Всего {{ bb_count }} объявлений.</p>
+            {% endif %}
+        {% endwith %}
     </nav>
     <section>
         {% block content %}

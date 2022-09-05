@@ -23,5 +23,6 @@ urlpatterns = [
     path('detail/<int:pk>/', BbDetailView.as_view(), name='detail'),
     # path('detail/<int:year>/<int:month>/<int:day>/<int:pk>/', BbDayDetailView.as_view(), name='detail'),
 
-    path('', BbIndexView.as_view(), name='index'),
+    # path('', BbIndexView.as_view(), name='index'),
+    path('', index, name='index'),
 ]

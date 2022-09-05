@@ -5,6 +5,9 @@
 {% block content %}
 
 <p> Рубрика: {{ bb.rc.name }} </p>
+
+<p># {{ forloop.counter }}</p>
+
 <h2> {{ bb.title }} </h2>
 <p> {{ bb.content }} </p>
 <p> Цена: {{ bb.price|default:'No price!' }} </p>

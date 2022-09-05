@@ -7,8 +7,9 @@ from django.views.generic.list import ListView
 from django.views.generic.dates import ArchiveIndexView, MonthArchiveView, YearArchiveView, DayArchiveView, DateDetailView
 
 from http.client import HTTPResponse
-from django.shortcuts   import render
-from django.urls        import reverse_lazy, reverse
+from django.shortcuts import render
+from django.urls import reverse_lazy, reverse
+from django.core.paginator import Paginator
 
 # from django.http        import HttpResponse
 
@@ -28,10 +29,16 @@ def index(request):
     # В зависимоти от контекста запрома, render ведет себя по разному
     if request.method == 'GET':     # не обязательно
         # rc = Rubric.objects.annotate(Count('bb'))
-        bbs             = Bb.objects.all()
-        # bbs             = None
-        rubrics         = Rubric.objects.all()
-        context         = {'bbs': bbs, 'rubrics': rubrics, 'rc': RC}
+        bbs       = Bb.objects.all()
+        paginator = Paginator(bbs, 3)
+        if "page" in request.GET:
+            page_num = request.GET['page']
+        else:
+            page_num = 1
+            page = paginator.get_page(page_num)
+
+        rubrics   = Rubric.objects.all()
+        context   = {'bbs': page.object_list, 'rubrics': rubrics, 'rc': RC, 'page': page, 'bbstotal': bbs}
         return render(request, 'bboard/index.html', context)
     else:
         return HTTPResponse('Wrong method: 405')
