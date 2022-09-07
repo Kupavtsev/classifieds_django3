@@ -4,26 +4,32 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Главная{% endblock %} ::
-        Доска объявлений</title>
+    <title>{% block title %}Главная{% endblock %} :: Доска объявлений</title>
 </head>
 
 <body>
     <header>
         <hl>Объявления</hl>
         <link rel="stylesheet" type="text/css" href="{% static 'bboard/style.css' %}">
-    </header>
-    <nav>
+        
         <a href="{% url 'index' %}"><b>Главная</b></а>
-            <a href="{% url 'add' %}"><b>Добавить</b></а>
+        <a href="{% url 'add' %}"><b>Добавить</b></а>
+
+        {% if user.is_authenticated %}
+            <a href="/accounts/logout/">Exit</a>
+        {% else %}
+            <a href="/accounts/login/">Enter</a>
+        {% endif %}
+    </header>
 
 
-                {% for rubric in rc %}
-                    <a href="{{ rubric.get_absolute_url }}">
-                        <!-- <a href="{% url 'by_rubric' rubric.pk %}"> -->
-                        {{ rubric.name }}: {{ rubric.bb__count }}
-                    </a>
-                {% endfor %}
+    <nav>
+        {% for rubric in rc %}
+            <a href="{{ rubric.get_absolute_url }}">
+                {# <a href="{% url 'by_rubric' rubric.pk %}"> #}
+                {{ rubric.name }}: {{ rubric.bb__count }}
+            </a>
+        {% endfor %}
 
         {% with bb_count=bbstotal.count %}
             {% if bb_count > 0 %}
@@ -31,10 +37,12 @@
             {% endif %}
         {% endwith %}
     </nav>
+
     <section>
         {% block content %}
         {% endblock %}
     </section>
+
 </body>
 
 </html>

@@ -2,22 +2,26 @@
 
 {% block content %}
 
-{# This is comments for code!? #}
+{# This is comments for code in Django Templates! #}
 
-<!-- ADVS -->
+{# <!-- ADVS --> #}
 {% if bbs %}
 
     {% for bb in bbs %}
         {% cycle 'bb1' 'bb2' 'bb3' as currentclass %}
         <div class={{currentclass}}>
-            <!-- <h2>{{ bb.title }}</h2> -->
+            
+            {#<!-- <h2>{{ bb.title }}</h2> -->#}
+            
             <h2 ><a href="{% url 'detail' pk=bb.pk %}">{{ bb.title_and_price }}</a></h2>
             <p>{{ bb.content }}</p>
             <p><a href="/bboard/{{ bb.rubric.pk }}/">
                     {{ bb.rubric.name }}</a></p>
             {% firstof bb.phone bb.email 'Контакт не указан' %}
             <p >Опубликовано: {{ bb.published|date:"DATETIME_FORMAT" }}</p>
-            <!-- <p class={{currentclass}}>Опубликовано: {{ bb.published|date:"d.m.Y H:i:s" }}</p> -->
+            
+            {#<!-- <p class={{currentclass}}>Опубликовано: {{ bb.published|date:"d.m.Y H:i:s" }}</p> -->#}
+       
         </div>
     {% endfor %}
 
@@ -25,7 +29,8 @@
         <p><h3>Объявлений нет</h3></p>
 {% endif %}
 
-<!-- PAGINATOR -->
+{# <!-- PAGINATOR --> #}
+
 <div>
     {% if page.has_previous %}
         <a href="?page={{ page.previous_page_number }}">&lt;</a>
@@ -38,11 +43,7 @@
     {% endif %}
 </div>
 
-<!-- <p>
-    {% for d in date_list %}
-    List: {{ d.year }}
-    {% endfor %}
-</p> -->
+ {#<!-- <p>{% for d in date_list %}List: {{ d.year }}{% endfor %}</p> --> #}
 
 
 {% endblock %}

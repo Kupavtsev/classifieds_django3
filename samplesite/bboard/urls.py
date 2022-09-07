@@ -16,8 +16,8 @@ urlpatterns = [
     path('<int:year>/<int:month>', BbMonthArchiveView.as_view()),
     path('delete/<int:pk>/', BbDeleteView.as_view(), name='delete'),
     
-    path('edit/<int:pk>/', BbUpdateView.as_view(), name='edit'),
-    # path('edit/<int:pk>/', edit, name='edit'),
+    # path('edit/<int:pk>/', BbUpdateView.as_view(), name='edit'),
+    path('edit/<int:pk>/', edit, name='edit'),
 
     path('add/', BbAddFormView.as_view(), name='add'),
     # path('<int:rubric_id>/', by_rubric, name='by_rubric'),

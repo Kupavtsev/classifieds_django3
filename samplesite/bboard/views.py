@@ -176,7 +176,7 @@ def edit(request, pk):
         if bbf.is_valid():
             # if bbf.has_changed():
             bbf.save()
-            return HttpResponseRedirect(reverse('BbByRubricView',
+            return HttpResponseRedirect(reverse('by_rubric',
                                         kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
         else:
             context = {'form': bbf}
