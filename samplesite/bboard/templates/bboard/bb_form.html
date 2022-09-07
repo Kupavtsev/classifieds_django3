@@ -9,16 +9,31 @@
 <form method="post">
     {% csrf_token %}
 
-    {% for i in form %}
-    <div>
-        <p>{{ i.name }}</p>
-        {{ i }}
-    </div>
+    {% for hidden in form.hidden_fields %}
+        {{ hidden }}
     {% endfor %}
 
-    <!-- Форма отрендерит себя сама -->
-    <!-- {{ form.as_p }} -->
-    <input type="submit" value="Сохранить">
+    {% if form.non_field_errors %}
+        <ul>
+            {% for error in form.non_field_errors %}
+            <li><em>{{ error|escape }}</em></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% for field in form.visible_fields %}
+        {% if field.errors %}
+            <ul>
+                {% for error in field.errors %}
+                <li><em>{{ error|escape }}</em></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <p>{{ field.label_tag }}<br>{{ field }}</br>{{ field.help_text }}</p>
+    {% endfor %}
+
+    <p><input type="submit" value="Исправить"></p>
 
 </form>
 {% endblock %}

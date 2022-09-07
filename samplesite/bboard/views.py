@@ -1,4 +1,5 @@
 from django.db.models import Count, OuterRef, Exists
+from django.http import HttpResponseRedirect
 from http.client import HTTPResponse
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 from django.views.generic.base import TemplateView
@@ -6,7 +7,6 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.list import ListView
 from django.views.generic.dates import ArchiveIndexView, MonthArchiveView, YearArchiveView, DayArchiveView, DateDetailView
 
-from http.client import HTTPResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.core.paginator import Paginator
@@ -24,9 +24,10 @@ for r in Rubric.objects.annotate(is_expensive=subquery).filter(is_expensive=True
 
 RC = Rubric.objects.annotate(Count('bb'))
 
-# This is Third version III
+# MAIN PAGE
 def index(request):
-    # В зависимоти от контекста запрома, render ведет себя по разному
+    # В зависимоти от контекста запроса, render ведет себя по разному
+
     if request.method == 'GET':     # не обязательно
         # rc = Rubric.objects.annotate(Count('bb'))
         bbs       = Bb.objects.all()
@@ -35,8 +36,7 @@ def index(request):
             page_num = request.GET['page']
         else:
             page_num = 1
-            page = paginator.get_page(page_num)
-
+        page = paginator.get_page(page_num)
         rubrics   = Rubric.objects.all()
         context   = {'bbs': page.object_list, 'rubrics': rubrics, 'rc': RC, 'page': page, 'bbstotal': bbs}
         return render(request, 'bboard/index.html', context)
@@ -58,7 +58,7 @@ class BbIndexView(ArchiveIndexView):
         return context
 
 
-# Func version by_rubric
+# BY RUBRIC - FUNC
 def by_rubric(request, rubric_id):
     bbs             = Bb.objects.filter(rubric=rubric_id)
     rubrics         = Rubric.objects.all()
@@ -66,7 +66,7 @@ def by_rubric(request, rubric_id):
     context         = {'bbs': bbs, 'rubrics': rubrics, 'current_rubric': current_rubric, 'rc': RC}
     return render(request, 'bboard/by_rubric.html', context)
 
-# Class version by_rubric
+# BY RUBRIC - CLASS
 # It mixdex class You Should avoid such a constructions!
 class BbByRubricView(SingleObjectMixin, ListView):
     template_name = 'bboard/by_rubric.html'
@@ -103,7 +103,7 @@ class BbByRubricViewListView(ListView):
         return context
 
 
-
+# DETAIL VIEW OF EACH PRODUCT
 class BbDetailView(DetailView):
     model = Bb
 
@@ -151,7 +151,7 @@ class BbAddFormView(FormView):
         return reverse('by_rubric',
                     kwargs={'rubric_id': self.object.cleaned_data['rubric'].pk})
 
-# EDIT AD
+# EDIT AD FORM - CLASS
 class BbUpdateView(UpdateView):
     model = Bb
     form_class = BbForm
@@ -162,6 +162,38 @@ class BbUpdateView(UpdateView):
         context = super().get_context_data(*args, **kwargs)
         context['rc'] = RC
         return context
+
+# EDIT AD FORM - FUNC
+# ITS DOESNT WORK!!!!!
+# Срабатывает метод GET, и почему то перекидывает на create.html
+def edit(request, pk):
+    bb = Bb.objects.get(pk=pk)
+    print('=' * 9)
+    print(bb)
+    print('=' * 9)
+    if request.method == 'POST':
+        bbf = BbForm(request.POST, instance=bb)
+        if bbf.is_valid():
+            # if bbf.has_changed():
+            bbf.save()
+            return HttpResponseRedirect(reverse('BbByRubricView',
+                                        kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
+        else:
+            context = {'form': bbf}
+            return render(request, 'bboard/bb_form.html', context)
+    else:
+        print('=' * 9)
+        print('ELSE')
+        print('=' * 9)
+        # должен поределять конкретную сущность!!!
+        # bbf = BbForm()
+        bbf = BbForm(instance=bb)           # НЕ ПОЛУЧАЕТ СОДЕРЖИМОЕ В СКОБКАХ
+        print('=' * 9)
+        print(bbf)
+        print('=' * 9)
+        context = {'form': bbf}
+        return render(request, 'bboard/bb_form.html', context)
+
 
 class BbDeleteView(DeleteView):
     model = Bb

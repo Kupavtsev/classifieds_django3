@@ -4,7 +4,7 @@ from .models            import Bb
 from .views import (index, BbIndexView,
                    by_rubric, BbByRubricView, BbByRubricViewListView,
                    BbCreateView, BbAddFormView,
-                   BbDetailView, BbUpdateView, BbDeleteView,
+                   BbDetailView, BbUpdateView, edit, BbDeleteView,
                    BbMonthArchiveView, BbYearArchiveView, BbDayArchiveView, BbDayDetailView)
 
 # app_name = 'bboard'
@@ -15,7 +15,10 @@ urlpatterns = [
     # path('<int:year>/', BbYearArchiveView.as_view()),
     path('<int:year>/<int:month>', BbMonthArchiveView.as_view()),
     path('delete/<int:pk>/', BbDeleteView.as_view(), name='delete'),
+    
     path('edit/<int:pk>/', BbUpdateView.as_view(), name='edit'),
+    # path('edit/<int:pk>/', edit, name='edit'),
+
     path('add/', BbAddFormView.as_view(), name='add'),
     # path('<int:rubric_id>/', by_rubric, name='by_rubric'),
     path('<int:rubric_id>/', BbByRubricView.as_view(), name='by_rubric'),

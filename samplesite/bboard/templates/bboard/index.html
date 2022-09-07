@@ -3,6 +3,8 @@
 {% block content %}
 
 {# This is comments for code!? #}
+
+<!-- ADVS -->
 {% if bbs %}
 
     {% for bb in bbs %}
@@ -22,10 +24,25 @@
 {% else %}
         <p><h3>Объявлений нет</h3></p>
 {% endif %}
-<p>
+
+<!-- PAGINATOR -->
+<div>
+    {% if page.has_previous %}
+        <a href="?page={{ page.previous_page_number }}">&lt;</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+    {% endif %}
+        Часть №{{ page.number }} из {{ page.paginator.num_pages }}
+    {% if page.has_next %}
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="?page={{ page.next_page_number }}">&gt;</a>
+    {% endif %}
+</div>
+
+<!-- <p>
     {% for d in date_list %}
     List: {{ d.year }}
     {% endfor %}
-</p>
+</p> -->
+
 
 {% endblock %}
