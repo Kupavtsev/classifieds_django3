@@ -17,6 +17,7 @@
 
         {% if user.is_authenticated %}
             <a href="/accounts/logout/">Exit</a>
+            {{ user.username }}
         {% else %}
             <a href="/accounts/login/">Enter</a>
         {% endif %}
