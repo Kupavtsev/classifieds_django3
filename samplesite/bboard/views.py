@@ -7,9 +7,11 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.list import ListView
 from django.views.generic.dates import ArchiveIndexView, MonthArchiveView, YearArchiveView, DayArchiveView, DateDetailView
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.core.paginator import Paginator
+from django.forms import modelformset_factory
+from django.forms.formsets import ORDERING_FIELD_NAME
 
 # from django.http        import HttpResponse
 
@@ -22,6 +24,7 @@ subquery = Exists(Bb.objects.filter(rubric=OuterRef('pk'), price__gt=100000))
 for r in Rubric.objects.annotate(is_expensive=subquery).filter(is_expensive=True): print(r.name)
 
 
+rubricsAll   = Rubric.objects.all()
 RC = Rubric.objects.annotate(Count('bb'))
 
 # MAIN PAGE
@@ -37,8 +40,8 @@ def index(request):
         else:
             page_num = 1
         page = paginator.get_page(page_num)
-        rubrics   = Rubric.objects.all()
-        context   = {'bbs': page.object_list, 'rubrics': rubrics, 'rc': RC, 'page': page, 'bbstotal': bbs}
+        # rubrics   = Rubric.objects.all()
+        context   = {'bbs': page.object_list, 'rubrics': rubricsAll, 'rc': RC, 'page': page, 'bbstotal': bbs}
         return render(request, 'bboard/index.html', context)
     else:
         return HTTPResponse('Wrong method: 405')
@@ -61,9 +64,9 @@ class BbIndexView(ArchiveIndexView):
 # BY RUBRIC - FUNC
 def by_rubric(request, rubric_id):
     bbs             = Bb.objects.filter(rubric=rubric_id)
-    rubrics         = Rubric.objects.all()
+    # rubrics         = Rubric.objects.all()
     current_rubric  = Rubric.objects.get(pk=rubric_id)
-    context         = {'bbs': bbs, 'rubrics': rubrics, 'current_rubric': current_rubric, 'rc': RC}
+    context         = {'bbs': bbs, 'rubrics': rubricsAll, 'current_rubric': current_rubric, 'rc': RC}
     return render(request, 'bboard/by_rubric.html', context)
 
 # BY RUBRIC - CLASS
@@ -80,7 +83,6 @@ class BbByRubricView(SingleObjectMixin, ListView):
     def get_context_data(self, **kwargs: any):
         context = super().get_context_data(**kwargs)
         context['bbs'] = context['object_list']         # по умолчанию хранит записи из ListView
-        # context['rubrics'] = Rubric.objects.all()
         context['current_rubric'] = self.object         # берем рубрику из get
         context['rc'] = RC
         return context
@@ -97,7 +99,6 @@ class BbByRubricViewListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context['rubrics'] = Rubric.objects.all()
         context['current_rubric'] = Rubric.objects.get(pk=self.kwargs['rubric_id'])
         context['rc'] = RC
         return context
@@ -109,7 +110,6 @@ class BbDetailView(DetailView):
 
     def get_context_data(self, **kwargs: any):
         context = super().get_context_data(**kwargs)
-        # context['rubrics'] = Rubric.objects.all()
         context['rc'] = RC
         return context
 
@@ -123,7 +123,6 @@ class BbCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) # получаем контекст шаблона от метода базового класса
-        # context['rubrics'] = Rubric.objects.all()
         context['rc'] = RC
         return context
 
@@ -261,3 +260,19 @@ class BbDayDetailView(DateDetailView):
         return context
 
     
+def rubrics(request):
+    RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_order=True, can_delete=True)
+
+    if request.method == 'POST':
+        formset = RubricFormSet(request.POST)
+        if formset.is_valid():
+            for form in formset:
+                if form.cleaned_data:
+                    rubric = form.save(commit=False)
+                    rubric.order = form.cleaned_data[ORDERING_FIELD_NAME]
+                    rubric.save()
+            return redirect('bboard:index')
+    else:
+        formset = RubricFormSet()
+    context = {'formset': formset}
+    return render(request, 'bboard/rubrics.html', context)

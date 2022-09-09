@@ -19,7 +19,8 @@ from django.urls        import path, include
 from django.contrib     import admin
 from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordChangeDoneView, PasswordChangeView,
-                                       PasswordResetView, PasswordResetDoneView)
+                                       PasswordResetView, PasswordResetDoneView,
+                                       PasswordResetConfirmView, PasswordResetCompleteView)
 
 
 # from bboard.views       import index
@@ -39,6 +40,15 @@ urlpatterns = [
     #                         subject_template_name='registration/reset_subject.txt',
     #                         email_template='registration/reset_email.txt'
     #                         ), name='password_reset'),
+    # path('accounts/password_reset/done', PasswordResetDoneView.as_view(
+    #                           template_name='registration/email_sent.html',
+    #                           name='password_reset_done')),
+    # path('accounts/reset/<uidb64>/<token>', PasswordResetConfirmView.as_view(
+    #                           template_name='registration/confirm_password.html',
+    #                           name='password_reset_confirm')),
+    # path('accounts/reset/done/', PasswordResetCompleteView.as_view(
+    #                           template_name='registration/password_confirmed.html',
+    #                           name='password_reset_complete')),
 ]
 
 if settings.DEBUG:
