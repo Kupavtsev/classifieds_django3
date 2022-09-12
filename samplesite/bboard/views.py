@@ -271,7 +271,8 @@ def rubrics(request):
                     rubric = form.save(commit=False)
                     rubric.order = form.cleaned_data[ORDERING_FIELD_NAME]
                     rubric.save()
-            return redirect('bboard:index')
+            return redirect('index')
+            # return redirect('bboard:index')
     else:
         formset = RubricFormSet()
     context = {'formset': formset}
