@@ -1,3 +1,5 @@
+from multiprocessing import context
+from xml.dom import ValidationErr
 from django.db.models import Count, OuterRef, Exists
 from django.http import HttpResponseRedirect
 from http.client import HTTPResponse
@@ -10,8 +12,8 @@ from django.views.generic.dates import ArchiveIndexView, MonthArchiveView, YearA
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.core.paginator import Paginator
-from django.forms import modelformset_factory
-from django.forms.formsets import ORDERING_FIELD_NAME
+from django.forms import modelformset_factory, BaseModelFormSet, inlineformset_factory
+# from django.forms.formsets import ORDERING_FIELD_NAME
 
 # from django.http        import HttpResponse
 
@@ -259,21 +261,52 @@ class BbDayDetailView(DateDetailView):
         context['rc'] = RC
         return context
 
-    
+# Validation in forms
+class RubricBaseFormSet(BaseModelFormSet):
+    def clean(self) -> None:
+        super().clean()
+        names = [form.cleaned_data['name'] for form in self.forms if 'name' in form.cleaned_data]
+        if ('Недвижимость' not in names) or ('Транспорт' not in names):
+            raise ValidationErr(' Добавьте Недвижимость и Транспорт')
+
 def rubrics(request):
-    RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_order=True, can_delete=True)
+    RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_delete=True, formset=RubricBaseFormSet)
+    # RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_order=True, can_delete=True)
 
     if request.method == 'POST':
         formset = RubricFormSet(request.POST)
         if formset.is_valid():
-            for form in formset:
-                if form.cleaned_data:
-                    rubric = form.save(commit=False)
-                    rubric.order = form.cleaned_data[ORDERING_FIELD_NAME]
-                    rubric.save()
+
+            # IT CAN NOT DELETE Rubrics! and reorder!!
+            # for form in formset:
+            #     if form.cleaned_data:
+            #         rubric = form.save(commit=False)
+            #         rubric.order = form.cleaned_data[ORDERING_FIELD_NAME]
+            #         rubric.save()
+            # return redirect('index')
+            
+            # That is can to delete and rename, but cant reorder (no such Model column)...
+            formset.save()
             return redirect('index')
-            # return redirect('bboard:index')
+
+            
     else:
         formset = RubricFormSet()
+    
     context = {'formset': formset}
     return render(request, 'bboard/rubrics.html', context)
+
+
+def bbs(request, rubric_id):
+    BbsFormSet = inlineformset_factory(Rubric, Bb, form=BbForm, extra=1)
+    rubric = Rubric.objects.get(pk=rubric_id)
+    if request.method == 'POST':
+        formset = BbsFormSet(request.POST, instance=rubric)
+        if formset.is_valid():
+            formset.save()
+            return redirect('index')
+    else:
+        formset = BbsFormSet(instance=rubric)
+    
+    context = {'formset': formset, 'current_rubric': rubric}
+    return render(request, 'bboard/bbs.html', context)

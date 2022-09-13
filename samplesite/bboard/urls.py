@@ -6,12 +6,13 @@ from .views import (index, BbIndexView,
                    BbCreateView, BbAddFormView,
                    BbDetailView, BbUpdateView, edit, BbDeleteView,
                    BbMonthArchiveView, BbYearArchiveView, BbDayArchiveView, BbDayDetailView,
-                   rubrics)
+                   rubrics, bbs)
 
 # app_name = 'bboard'
 
 urlpatterns = [
-    path('rubrics/', rubrics),
+    path('bbs/<int:rubric_id>', bbs, name='bbs'),
+    path('rubrics/', rubrics, name='rubrics'),
     path('<int:year>/<int:month>/<int:day>', BbDayArchiveView.as_view(model=Bb, date_field='published', month_format='%m')),
     # path('<int:year>/', BbYearArchiveView.as_view()),
     path('<int:year>/<int:month>', BbMonthArchiveView.as_view()),

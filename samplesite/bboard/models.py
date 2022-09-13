@@ -76,11 +76,9 @@ class Rubric(models.Model) :
         # return "/bboard/%s" % self.pk
         return f'/bboard/{self.pk}'
 
-    name = models.CharField(
-        max_length=20, db_index=True, verbose_name='Название'
-        )
-    # some = models.CharField(max_length=4, verbose_name='Some test') # ??????
-    show = models.BooleanField(default=True)    # Не дает возможность выбрать рубрику False
+    name = models.CharField(max_length=20, db_index=True, verbose_name='Название')
+    show = models.BooleanField(default=True)    # Its doesnt work!!!
+    # order = models.SmallIntegerField(default=0, db_index=True, blank=True, null=True)   # makemigration: no such column
 
     def __str__(self):
         return self.name

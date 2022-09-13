@@ -5,6 +5,7 @@
 
 {% block content %}
 <h2>Рубрика: {{ current_rubric.name }}</h2>
+<a href={% url 'bbs' rubric.pk %}>Редактировать объявления</a>
 {% for bb in bbs %}
 <div>
     <p># {{ forloop.counter }}</p>
