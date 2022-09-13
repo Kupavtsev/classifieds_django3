@@ -23,7 +23,7 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordResetConfirmView, PasswordResetCompleteView)
 
 
-# from bboard.views       import index
+from bboard.views       import PassChg
 
 urlpatterns = [
     path('bboard/', include('bboard.urls')),
@@ -32,30 +32,35 @@ urlpatterns = [
     path('accounts/login/', LoginView.as_view(), name='login'),
     path('accounts/logout/', LogoutView.as_view(next_page='index'), name='logout'),
     
-    path('accounts/password_change/', PasswordChangeView.as_view(template_name='registration/password_change_form.html'), name='password_change'),
+    path('accounts/password_change/', PassChg.as_view(), name='password_change'),
     path('accounts/password_change/done/', PasswordChangeDoneView.as_view(template_name='registration/password_changed.html'), name='password_change_done'),
     
+    # Use default parametrs
+    path('accounts/password_reset/', PasswordResetView.as_view(), name='password_reset'),
     # path('accounts/password_reset/', PasswordResetView.as_view(
     #                         template_name='registration/reset_password.html',
     #                         subject_template_name='registration/reset_subject.txt',
-    #                         email_template='registration/reset_email.txt'
+    #                         email_template_name='registration/reset_email.txt'
     #                         ), name='password_reset'),
-    # path('accounts/password_reset/done', PasswordResetDoneView.as_view(
-    #                           template_name='registration/email_sent.html',
-    #                           name='password_reset_done')),
-    # path('accounts/reset/<uidb64>/<token>', PasswordResetConfirmView.as_view(
-    #                           template_name='registration/confirm_password.html',
-    #                           name='password_reset_confirm')),
-    # path('accounts/reset/done/', PasswordResetCompleteView.as_view(
-    #                           template_name='registration/password_confirmed.html',
-    #                           name='password_reset_complete')),
+
+    path('accounts/password_reset/done', PasswordResetDoneView.as_view(
+                              template_name='registration/email_sent.html'),
+                              name='password_reset_done'),
+    path('accounts/reset/<uidb64>/<token>', PasswordResetConfirmView.as_view(
+                              template_name='registration/confirm_password.html'),
+                              name='password_reset_confirm'),
+    path('accounts/reset/done/', PasswordResetCompleteView.as_view(
+                              template_name='registration/password_confirmed.html'),
+                              name='password_reset_complete'),
 ]
 
-if settings.DEBUG:
-    import debug_toolbar
-    urlpatterns += [
-        url(
-            r'^__debug__/',
-            include(debug_toolbar.urls)
-            ),
-    ]
+
+
+# if settings.DEBUG:
+#     import debug_toolbar
+#     urlpatterns += [
+#         url(
+#             r'^__debug__/',
+#             include(debug_toolbar.urls)
+#             ),
+#     ]

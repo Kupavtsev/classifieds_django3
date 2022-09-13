@@ -15,6 +15,8 @@ from django.core.paginator import Paginator
 from django.forms import modelformset_factory, BaseModelFormSet, inlineformset_factory
 # from django.forms.formsets import ORDERING_FIELD_NAME
 
+from django.contrib.auth.views import PasswordChangeView
+
 # from django.http        import HttpResponse
 
 from .models            import Bb, Rubric
@@ -310,3 +312,7 @@ def bbs(request, rubric_id):
     
     context = {'formset': formset, 'current_rubric': rubric}
     return render(request, 'bboard/bbs.html', context)
+
+
+class PassChg(PasswordChangeView):
+    template_name: str = 'registration/password_change_my.html'
