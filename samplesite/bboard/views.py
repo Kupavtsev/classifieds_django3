@@ -1,7 +1,7 @@
 from multiprocessing import context
 from xml.dom import ValidationErr
 from django.db.models import Count, OuterRef, Exists
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from http.client import HTTPResponse
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 from django.views.generic.base import TemplateView
@@ -15,7 +15,7 @@ from django.core.paginator import Paginator
 from django.forms import modelformset_factory, BaseModelFormSet, inlineformset_factory
 # from django.forms.formsets import ORDERING_FIELD_NAME
 
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, redirect_to_login
 
 # from django.http        import HttpResponse
 
@@ -272,46 +272,54 @@ class RubricBaseFormSet(BaseModelFormSet):
             raise ValidationErr(' Добавьте Недвижимость и Транспорт')
 
 def rubrics(request):
-    RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_delete=True, formset=RubricBaseFormSet)
-    # RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_order=True, can_delete=True)
+    if request.user.has_perm('bboard.add_rubric'):
+        RubricFormSet = modelformset_factory(Rubric, fields=('name',),
+                                            can_delete=True, formset=RubricBaseFormSet)
+        # RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_order=True, can_delete=True)
 
-    if request.method == 'POST':
-        formset = RubricFormSet(request.POST)
-        if formset.is_valid():
+        if request.method == 'POST':
+            formset = RubricFormSet(request.POST)
+            if formset.is_valid():
 
-            # IT CAN NOT DELETE Rubrics! and reorder!!
-            # for form in formset:
-            #     if form.cleaned_data:
-            #         rubric = form.save(commit=False)
-            #         rubric.order = form.cleaned_data[ORDERING_FIELD_NAME]
-            #         rubric.save()
-            # return redirect('index')
-            
-            # That is can to delete and rename, but cant reorder (no such Model column)...
-            formset.save()
-            return redirect('index')
+                # IT CAN NOT DELETE Rubrics! and reorder!!
+                # for form in formset:
+                #     if form.cleaned_data:
+                #         rubric = form.save(commit=False)
+                #         rubric.order = form.cleaned_data[ORDERING_FIELD_NAME]
+                #         rubric.save()
+                # return redirect('index')
+                
+                # That is can to delete and rename, but cant reorder (no such Model column)...
+                formset.save()
+                return redirect('index')
 
-            
+                
+        else:
+            formset = RubricFormSet()
+        
+        context = {'formset': formset}
+        return render(request, 'bboard/rubrics.html', context)
     else:
-        formset = RubricFormSet()
-    
-    context = {'formset': formset}
-    return render(request, 'bboard/rubrics.html', context)
+        return HttpResponseForbidden('Вы не имеете допуска к списку рубрик')
 
-
+# Редактировать объявления
 def bbs(request, rubric_id):
-    BbsFormSet = inlineformset_factory(Rubric, Bb, form=BbForm, extra=1)
-    rubric = Rubric.objects.get(pk=rubric_id)
-    if request.method == 'POST':
-        formset = BbsFormSet(request.POST, instance=rubric)
-        if formset.is_valid():
-            formset.save()
-            return redirect('index')
+    if request.user.is_authenticated:
+        BbsFormSet = inlineformset_factory(Rubric, Bb, form=BbForm, extra=1)
+        rubric = Rubric.objects.get(pk=rubric_id)
+        if request.method == 'POST':
+            formset = BbsFormSet(request.POST, instance=rubric)
+            if formset.is_valid():
+                formset.save()
+                return redirect('index')
+        else:
+            formset = BbsFormSet(instance=rubric)
+        
+        context = {'formset': formset, 'current_rubric': rubric}
+        return render(request, 'bboard/bbs.html', context)
     else:
-        formset = BbsFormSet(instance=rubric)
-    
-    context = {'formset': formset, 'current_rubric': rubric}
-    return render(request, 'bboard/bbs.html', context)
+        return HttpResponseForbidden('Вы не имеете допуска к списку редактирования объявлений')
+        # redirect_to_login(reverse('bbs', rubric_id))
 
 
 class PassChg(PasswordChangeView):

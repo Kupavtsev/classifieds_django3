@@ -33,7 +33,9 @@ urlpatterns = [
     path('accounts/logout/', LogoutView.as_view(next_page='index'), name='logout'),
     
     path('accounts/password_change/', PassChg.as_view(), name='password_change'),
-    path('accounts/password_change/done/', PasswordChangeDoneView.as_view(template_name='registration/password_changed.html'), name='password_change_done'),
+    path('accounts/password_change/done/', PasswordChangeDoneView.as_view(
+                        template_name='registration/password_changed.html'),
+                        name='password_change_done'),
     
     # Use default parametrs
     path('accounts/password_reset/', PasswordResetView.as_view(), name='password_reset'),
