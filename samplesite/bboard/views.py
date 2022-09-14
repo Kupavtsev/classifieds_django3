@@ -1,6 +1,6 @@
 from multiprocessing import context
 from xml.dom import ValidationErr
-from django.db.models import Count, OuterRef, Exists
+from django.db.models import Count, OuterRef, Exists, Prefetch
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from http.client import HTTPResponse
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
@@ -16,6 +16,7 @@ from django.forms import modelformset_factory, BaseModelFormSet, inlineformset_f
 # from django.forms.formsets import ORDERING_FIELD_NAME
 
 from django.contrib.auth.views import PasswordChangeView, redirect_to_login
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # from django.http        import HttpResponse
 
@@ -24,14 +25,30 @@ from .forms             import BbForm
 
 
 # SQL filters
+# f1
 subquery = Exists(Bb.objects.filter(rubric=OuterRef('pk'), price__gt=100000))
-for r in Rubric.objects.annotate(is_expensive=subquery).filter(is_expensive=True): print(r.name)
+# for r in Rubric.objects.annotate(is_expensive=subquery).filter(is_expensive=True): print(r.name)
+# f2
+pr1 = Prefetch('bb_set', queryset=Bb.objects.order_by('-title'))
+r = Rubric.objects.prefetch_related(pr1).first()
+# for bb in r.bb_set.all(): print(bb.price, end=' ')
+# f3
+pr2 = Prefetch('bb_set',
+                queryset=Bb.objects.filter(price__gt=1000),
+                to_attr='expensive')
+r2 = Rubric.objects.prefetch_related(pr2).get(pk=2)
+print(r2)
+for bb in r2.expensive: print(bb.price)
 
-
+# GLOBALS
 rubricsAll   = Rubric.objects.all()
 RC = Rubric.objects.annotate(Count('bb'))
 
-# MAIN PAGE
+
+#           ========================================= 
+#           ---===          1 MAIN PAGE        ===---
+#           ========================================= 
+# 1.1
 def index(request):
     # В зависимоти от контекста запроса, render ведет себя по разному
 
@@ -49,7 +66,7 @@ def index(request):
         return render(request, 'bboard/index.html', context)
     else:
         return HTTPResponse('Wrong method: 405')
-
+# 1.2
 class BbIndexView(ArchiveIndexView):
     model = Bb
     date_field = 'published'
@@ -65,7 +82,10 @@ class BbIndexView(ArchiveIndexView):
         return context
 
 
-# BY RUBRIC - FUNC
+#           ========================================= 
+#           ---===      2 BY RUBRIC - FUNC     ===---
+#           ========================================= 
+# 2.1
 def by_rubric(request, rubric_id):
     bbs             = Bb.objects.filter(rubric=rubric_id)
     # rubrics         = Rubric.objects.all()
@@ -73,8 +93,9 @@ def by_rubric(request, rubric_id):
     context         = {'bbs': bbs, 'rubrics': rubricsAll, 'current_rubric': current_rubric, 'rc': RC}
     return render(request, 'bboard/by_rubric.html', context)
 
-# BY RUBRIC - CLASS
+#           ---===      BY RUBRIC - CLASS      ===---
 # It mixdex class You Should avoid such a constructions!
+# 2.2
 class BbByRubricView(SingleObjectMixin, ListView):
     template_name = 'bboard/by_rubric.html'
     pk_url_kwarg: str = 'rubric_id'
@@ -89,11 +110,12 @@ class BbByRubricView(SingleObjectMixin, ListView):
         context['bbs'] = context['object_list']         # по умолчанию хранит записи из ListView
         context['current_rubric'] = self.object         # берем рубрику из get
         context['rc'] = RC
+        context['gt1000'] = r2.expensive
         return context
 
     def get_queryset(self):
         return self.object.bb_set.all()
-
+# 2.3
 class BbByRubricViewListView(ListView):
     template_name = 'bboard/by_rubric.html'
     context_object_name = 'bbs' # будет сохранен извлеченный набор записей
@@ -108,7 +130,10 @@ class BbByRubricViewListView(ListView):
         return context
 
 
-# DETAIL VIEW OF EACH PRODUCT
+#           ========================================= 
+#           ---===3 DETAIL VIEW OF EACH PRODUCT===---
+#           ========================================= 
+# 3.1
 class BbDetailView(DetailView):
     model = Bb
 
@@ -118,7 +143,10 @@ class BbDetailView(DetailView):
         return context
 
 
-# FORM
+#           ========================================= 
+#           ---===   4 Add new Advertisment    ===---
+#           ========================================= 
+# 4.1
 class BbCreateView(CreateView):
     template_name   = 'bboard/create.html'
     form_class      = BbForm
@@ -129,8 +157,8 @@ class BbCreateView(CreateView):
         context = super().get_context_data(**kwargs) # получаем контекст шаблона от метода базового класса
         context['rc'] = RC
         return context
-
-class BbAddFormView(FormView):
+# 4.2
+class BbAddFormView(LoginRequiredMixin, FormView):
     template_name   = 'bboard/create.html'
     form_class      = BbForm
     initial = {'price': 0.0}
@@ -154,8 +182,12 @@ class BbAddFormView(FormView):
         return reverse('by_rubric',
                     kwargs={'rubric_id': self.object.cleaned_data['rubric'].pk})
 
-# EDIT AD FORM - CLASS
-class BbUpdateView(UpdateView):
+
+#           ========================================= 
+#           ---===    5 EDIT AD FORM - CLASS   ===---
+#           ========================================= 
+# 5.1
+class BbUpdateView(UserPassesTestMixin, UpdateView):
     model = Bb
     form_class = BbForm
     # success_url = reverse_lazy('detail')
@@ -166,9 +198,11 @@ class BbUpdateView(UpdateView):
         context['rc'] = RC
         return context
 
-# EDIT AD FORM - FUNC
-# ITS DOESNT WORK!!!!!
-# Срабатывает метод GET, и почему то перекидывает на create.html
+    def test_func(self):
+        return self.request.user.is_staff
+
+#           ---===    EDIT AD FORM - FUNC   ===---
+# 5.2
 def edit(request, pk):
     bb = Bb.objects.get(pk=pk)
     print('=' * 9)
@@ -185,19 +219,11 @@ def edit(request, pk):
             context = {'form': bbf}
             return render(request, 'bboard/bb_form.html', context)
     else:
-        print('=' * 9)
-        print('ELSE')
-        print('=' * 9)
-        # должен поределять конкретную сущность!!!
-        # bbf = BbForm()
-        bbf = BbForm(instance=bb)           # НЕ ПОЛУЧАЕТ СОДЕРЖИМОЕ В СКОБКАХ
-        print('=' * 9)
-        print(bbf)
-        print('=' * 9)
+        bbf = BbForm(instance=bb)      
         context = {'form': bbf}
         return render(request, 'bboard/bb_form.html', context)
 
-
+# 5.3
 class BbDeleteView(DeleteView):
     model = Bb
     success_url = '/bboard/'
@@ -208,7 +234,10 @@ class BbDeleteView(DeleteView):
         return context
 
 
-# DATES
+#           ========================================= 
+#           ---===            6 DATES          ===---
+#           ========================================= 
+# 6.1
 class BbMonthArchiveView(MonthArchiveView):
     model = Bb
     date_field: str = 'published'
@@ -223,7 +252,7 @@ class BbMonthArchiveView(MonthArchiveView):
         context['rc'] = RC
         return context
 
-
+# 6.2
 class BbYearArchiveView(YearArchiveView):
     model = Bb
     date_field: str = 'published'
@@ -238,7 +267,7 @@ class BbYearArchiveView(YearArchiveView):
         context['rc'] = RC
         return context
 
-
+# 6.3
 class BbDayArchiveView(DayArchiveView):
     context_object_name: str = 'bbs'
     allow_empty: bool = True
@@ -250,6 +279,7 @@ class BbDayArchiveView(DayArchiveView):
         return context
 
 # this is does not work!!!
+# 6.4
 class BbDayDetailView(DateDetailView):
     model = Bb
     date_field: str = 'published'
@@ -263,14 +293,17 @@ class BbDayDetailView(DateDetailView):
         context['rc'] = RC
         return context
 
-# Validation in forms
+#           ========================================= 
+#           ---=== 7 Edit/Validation in forms  ===---
+#           ========================================= 
+# 7.1
 class RubricBaseFormSet(BaseModelFormSet):
     def clean(self) -> None:
         super().clean()
         names = [form.cleaned_data['name'] for form in self.forms if 'name' in form.cleaned_data]
         if ('Недвижимость' not in names) or ('Транспорт' not in names):
             raise ValidationErr(' Добавьте Недвижимость и Транспорт')
-
+# 7.1
 def rubrics(request):
     if request.user.has_perm('bboard.add_rubric'):
         RubricFormSet = modelformset_factory(Rubric, fields=('name',),
@@ -302,7 +335,11 @@ def rubrics(request):
     else:
         return HttpResponseForbidden('Вы не имеете допуска к списку рубрик')
 
-# Редактировать объявления
+
+#           ========================================= 
+#           ---===  Редактировать объявления   ===---
+#           =========================================
+# 7.2
 def bbs(request, rubric_id):
     if request.user.is_authenticated:
         BbsFormSet = inlineformset_factory(Rubric, Bb, form=BbForm, extra=1)
@@ -322,5 +359,9 @@ def bbs(request, rubric_id):
         # redirect_to_login(reverse('bbs', rubric_id))
 
 
+#           ========================================= 
+#           ---===  8 Password operations      ===---
+#           ========================================= 
+# 8.1
 class PassChg(PasswordChangeView):
     template_name: str = 'registration/password_change_my.html'

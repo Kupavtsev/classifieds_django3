@@ -29,8 +29,9 @@ urlpatterns = [
     path('bboard/', include('bboard.urls')),
     path('admin/', admin.site.urls),
 
+    # 8 Password operations
     path('accounts/login/', LoginView.as_view(), name='login'),
-    path('accounts/logout/', LogoutView.as_view(next_page='index'), name='logout'),
+    path('accounts/logout/', LogoutView.as_view(next_page='bboard:index'), name='logout'),
     
     path('accounts/password_change/', PassChg.as_view(), name='password_change'),
     path('accounts/password_change/done/', PasswordChangeDoneView.as_view(

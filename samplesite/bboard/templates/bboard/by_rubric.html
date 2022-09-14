@@ -5,16 +5,24 @@
 
 {% block content %}
 <h2>Рубрика: {{ current_rubric.name }}</h2>
-<a href={% url 'bbs' rubric.pk %}>Редактировать объявления</a>
+<a href={% url 'bboard:bbs' rubric.pk %}>Редактировать объявления</a>
+
+
 {% for bb in bbs %}
-<div>
-    <p># {{ forloop.counter }}</p>
-    <!-- <h2>{{ bb.title }}</h2> -->
-    <h2><a href="{% url 'detail' pk=bb.pk %}">{{ bb.title }}</a></h2>
-    <p>{{ bb.content }}</p>
-    <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
-    <p>Прошло {{ bb.published|timesince }}</p>
-    
-</div>
+    <div>
+        <p># {{ forloop.counter }}</p>
+        <!-- <h2>{{ bb.title }}</h2> -->
+        <h2><a href="{% url 'bboard:detail' pk=bb.pk %}">{{ bb.title }}</a></h2>
+        <p>{{ bb.content }}</p>
+        <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
+        <p>Прошло {{ bb.published|timesince }}</p>
+        
+    </div>
 {% endfor %}
+
+{% for bb in gt1000 %}
+    <h2><a href="{% url 'bboard:detail' pk=bb.pk %}">{{ bb.title }}</a></h2>
+    <p>{{ bb.content }}</p>
+{% endfor %}
+
 {% endblock %}

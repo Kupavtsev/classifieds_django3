@@ -11,7 +11,7 @@
 <h2> {{ bb.title }} </h2>
 <p> {{ bb.content }} </p>
 <p> Цена: {{ bb.price|default:'No price!' }} </p>
-<p><a href="{% url 'edit' pk=bb.pk %}">edit</a>
-    <a href="{% url 'delete' pk=bb.pk %}">delete</a>
+<p><a href="{% url 'bboard:edit' pk=bb.pk %}">edit</a>
+    <a href="{% url 'bboard:delete' pk=bb.pk %}">delete</a>
 </p>
 {% endblock %}
