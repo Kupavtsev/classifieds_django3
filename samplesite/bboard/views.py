@@ -1,8 +1,10 @@
 from multiprocessing import context
 from xml.dom import ValidationErr
 from django.db.models import Count, OuterRef, Exists, Prefetch
+from django.db.transaction import atomic
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from http.client import HTTPResponse
+
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
@@ -179,7 +181,7 @@ class BbAddFormView(LoginRequiredMixin, FormView):
 
     # Получаем доступ к pk из object
     def get_success_url(self):
-        return reverse('by_rubric',
+        return reverse('bboard:by_rubric',
                     kwargs={'rubric_id': self.object.cleaned_data['rubric'].pk})
 
 
@@ -203,6 +205,7 @@ class BbUpdateView(UserPassesTestMixin, UpdateView):
 
 #           ---===    EDIT AD FORM - FUNC   ===---
 # 5.2
+@atomic                 # В этом контроллере будет действовать режим атомарных запросов
 def edit(request, pk):
     bb = Bb.objects.get(pk=pk)
     print('=' * 9)
@@ -348,7 +351,7 @@ def bbs(request, rubric_id):
             formset = BbsFormSet(request.POST, instance=rubric)
             if formset.is_valid():
                 formset.save()
-                return redirect('index')
+                return redirect('bboard:index')
         else:
             formset = BbsFormSet(instance=rubric)
         

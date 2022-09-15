@@ -14,12 +14,14 @@
         <!-- <h2>{{ bb.title }}</h2> -->
         <h2><a href="{% url 'bboard:detail' pk=bb.pk %}">{{ bb.title }}</a></h2>
         <p>{{ bb.content }}</p>
+        <p><b>Цена:</b> {{ bb.price }}</p>
         <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
         <p>Прошло {{ bb.published|timesince }}</p>
         
     </div>
 {% endfor %}
 
+<br><br><br><br><br>
 {% for bb in gt1000 %}
     <h2><a href="{% url 'bboard:detail' pk=bb.pk %}">{{ bb.title }}</a></h2>
     <p>{{ bb.content }}</p>
