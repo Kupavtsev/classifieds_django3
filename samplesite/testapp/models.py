@@ -78,12 +78,17 @@ class Note(models.Model):
 class Message(models.Model):
     content = models.TextField()
 
+    def __str__(self):
+        return self.content
+
 class PrivateMessage(Message):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.OneToOneField(Message, on_delete=models.CASCADE,
                                     parent_link=True)
 
+
 # 5.1
+# This is Abstract, so it doesnot create tables in DB
 # class Message(models.Model):
 #     content = models.TextField()
 #     name = models.CharField(max_length=20)

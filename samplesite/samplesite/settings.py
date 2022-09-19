@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     # my apps
     'bboard',
     # 'bboard.apps.BboardConfig',
-    'testapp'
+    'testapp',
+    'captcha',
 ]
 
 MIDDLEWARE = [

@@ -1,44 +1,18 @@
 {% extends "layout/basic.html" %}
 {% block content %}
 
+<h2>Рубрики</h2>
 <form method="post">
     
     {% csrf_token %}
     {{ formset.management_form }}
-
-    {% if formset.non_form_errors %}
-        <ul>
-            {% for error in formset.non_form_errors %}
-            <li><em>{{ error|escape }}</em></li>
-            {% endfor %}
-        </ul>
-    {%  endif %}
-
-    {% for form in formset %}
-        
-        {% for hidden in form.hidden_fields %}
-            {{ hidden }}
+    <table>
+        {% for form in formset %}
+        <tr><td colspan="2">{{ form.name }}</td></tr>
+        <tr><td>{{ form.ORDER }}</td><td>{{ form.DELETE }}</td></tr>
         {% endfor %}
-        
-        {% if form.non_field_errors %}
-        <ul>
-            {% for error in form.non_field_errors %}
-            <li><em>{{ error|escape }}</em></li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        
-        {% for field in form.visible_fields %}
-            {% if field.errors %}
-            <ul>
-                {% for error in field.errors %}
-                <li><em>{{ error|escape }}</em></li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            <p>{{ field.label_tag }} {{ field }}<br>{{ field.help_text }}</p>
-        {% endfor %}
-    {% endfor %}
+    </table>
+
     <input type="submit" value="Сохранить">
 
 </form>

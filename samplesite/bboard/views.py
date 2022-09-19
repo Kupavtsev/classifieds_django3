@@ -16,6 +16,7 @@ from django.urls import reverse_lazy, reverse
 from django.core.paginator import Paginator
 from django.forms import modelformset_factory, BaseModelFormSet, inlineformset_factory,formset_factory
 # from django.forms.formsets import ORDERING_FIELD_NAME
+from django.forms.widgets import TextInput
 
 from django.contrib.auth.views import PasswordChangeView, redirect_to_login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -301,6 +302,7 @@ class BbDayDetailView(DateDetailView):
 #           ========================================= 
 # 7.1
 class RubricBaseFormSet(BaseModelFormSet):
+    ordering_widget = TextInput
     def clean(self) -> None:
         super().clean()
         names = [form.cleaned_data['name'] for form in self.forms if 'name' in form.cleaned_data]
@@ -309,7 +311,7 @@ class RubricBaseFormSet(BaseModelFormSet):
 # 7.1
 def rubrics(request):
     if request.user.has_perm('bboard.add_rubric'):
-        RubricFormSet = modelformset_factory(Rubric, fields=('name',),
+        RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_order=True,
                                             can_delete=True, formset=RubricBaseFormSet)
         # RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_order=True, can_delete=True)
 
@@ -388,7 +390,7 @@ def search(request):
     context = {'form': sf}
     return render(request, 'bboard/search.html', context)
 
-# 9.2
+# 9.2 Надо Сделать саму форму
 def formset_processing(request):
     FS = formset_factory(SearchForm, extra=3, can_order=True, can_delete=True)
 

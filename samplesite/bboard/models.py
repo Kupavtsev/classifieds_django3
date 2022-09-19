@@ -3,7 +3,9 @@ from django.db import models
 # from django.contrib.auth.models import User
 from django.core import validators
 
+#           ========================================= 
 # My validators
+#           ========================================= 
 def get_min_length():        # It works, but it doesn't show any messages!!!
     min_length = 3           # But before testapp, it works correctly
     return min_length
@@ -12,7 +14,10 @@ def validate_even(val):     # It works, but it doesn't show any messages!!!
     if val % 2 != 0:
         raise ValidationError(f'Число {val} нечетное', code='odd')
 
+
+#           ========================================= 
 # Main class of ads
+#           ========================================= 
 class Bb(models.Model):
 
     class Kinds(models.TextChoices):
@@ -69,6 +74,8 @@ class Bb(models.Model):
         else:
             return self.title
 
+
+#           ========================================= 
 
 class Rubric(models.Model) :
 
