@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     # 'bboard.apps.BboardConfig',
     'testapp',
     'captcha',
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [

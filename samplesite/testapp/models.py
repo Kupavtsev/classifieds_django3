@@ -1,14 +1,14 @@
-from email import message
-import email
-from pyexpat import model
-from statistics import mode
-from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+
+from django.contrib.postgres.constraints import ExclusionConstraint
+from django.contrib.postgres.indexes import GistIndex
+from django.contrib.postgres.fields import (DateTimeRangeField, ArrayField, HStoreField,
+                                            CICharField, JSONField, RangeOperators)
 
 
 #           ========================================= 
@@ -107,3 +107,56 @@ class PrivateMessage(Message):
 
 #     class Meta(Message.Meta):
 #         pass
+
+
+#           ========================================= 
+#           ---===        6 PostgreSQL 18      ===---
+#           =========================================
+class PGSRoomServing(models.Model):
+    name = models.CharField(max_length=20, verbose_name='Помещение')
+    reserving = DateTimeRangeField(verbose_name='Время резервирования')
+    cancelled = models.BooleanField(default=False, verbose_name='Отменить резервирования')
+
+    class Meta:
+        indexes = [
+            GistIndex(fields=['reserving'], name='i_pgsrr_reserving',
+                        opclasses=('range_ops',), fillfactor=50)
+        ]
+        constraints = [
+            ExclusionConstraint(name='c_pgsrr_reserving',
+                                expressions=[('name', RangeOperators.EQUAL),
+                                ('reserving', RangeOperators.OVERLAPS)],
+                                condition=models.Q(cancelled=False))
+        ]
+
+
+class PGSRubric(models.Model):
+    name = models.CharField(max_length=20, verbose_name='Имя')
+    description = models.TextField(verbose_name='Описание')
+    tags = ArrayField(base_field=models.CharField(max_length=20), verbose_name='Теги')
+
+    class Meta:
+        indexes = [
+            models.Index(fields=('name', 'description'),
+                                name='i_pgsrubric_name_description',
+                                opclasses=('varchar_pattern_ops', 'bpchar_pattern_ops'))
+        ]
+
+        constraints = [
+            ExclusionConstraint(name='c_pgsrubric_name_description',
+                                expressions=[('name', RangeOperators.EQUAL),
+                                ('description', RangeOperators.EQUAL)])
+            ]
+
+class PGSProject(models.Model):
+    name = models.CharField(max_length=40, verbose_name='Название')
+    platforms = ArrayField(base_field=ArrayField(
+                            models.CharField(max_length=20)), verbose_name='Использованные платформы')
+
+class PGSProject2(models.Model):
+    name = models.CharField(max_length=40, verbose_name='Название')
+    platforms =HStoreField(verbose_name='Использованные платформы')
+
+class PGSProject3(models.Model):
+    name = CICharField(max_length=40, verbose_name='Название')
+    data = JSONField()
