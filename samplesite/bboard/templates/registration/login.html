@@ -1,4 +1,5 @@
 {% extends "layout/basic.html" %}
+{% load bootstrap4 %}
 
 {% block title %}Вход{% endblock %}
 
@@ -11,9 +12,13 @@
 {% else %}
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <!-- <input type="hidden" name="next" value="{{ next }}"> -->
-        <input type="submit" value="Войти">
+        {% bootstrap_form form layout='horizontal' show_help=True %}
+        {% buttons submit='Войти' %}{% endbuttons %}
+
+
+        {# {{ form.as_p }} #}
+        {# <!-- <input type="hidden" name="next" value="{{ next }}"> --> #}
+        {# input type="submit" value="Войти"> #}
     </form>
 {% endif %}
 

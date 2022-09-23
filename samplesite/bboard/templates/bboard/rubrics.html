@@ -1,19 +1,18 @@
 {% extends "layout/basic.html" %}
-{% block content %}
+{% load bootstrap4 %}
 
 <h2>Рубрики</h2>
+{% block content %}
+
 <form method="post">
     
     {% csrf_token %}
-    {{ formset.management_form }}
-    <table>
-        {% for form in formset %}
-        <tr><td colspan="2">{{ form.name }}</td></tr>
-        <tr><td>{{ form.ORDER }}</td><td>{{ form.DELETE }}</td></tr>
-        {% endfor %}
-    </table>
 
-    <input type="submit" value="Сохранить">
+    
+    {% bootstrap_formset formset layout='horizontal' show_help=True %}
+    
+    {% bootstrap_button content='Сохранить' button_type='submit' button_class='btn-primary' %}
+    {# {% buttons submit='Сохранить' %}{% endbuttons %} #}
 
 </form>
 {% endblock %}

@@ -31,8 +31,17 @@
 {% endif %}
 
 {# <!-- PAGINATOR --> #}
-{% bootstrap_pagination page size="small" %}
-
+<div>
+    {% if page.has_previous %}
+        <a href="?page={{ page.previous_page_number }}">&lt;</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+    {% endif %}
+        Часть №{{ page.number }} из {{ page.paginator.num_pages }}
+    {% if page.has_next %}
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="?page={{ page.next_page_number }}">&gt;</a>
+    {% endif %}
+</div>
 
  {#<!-- <p>{% for d in date_list %}List: {{ d.year }}{% endfor %}</p> --> #}
 

@@ -311,7 +311,7 @@ class RubricBaseFormSet(BaseModelFormSet):
 # 7.1
 def rubrics(request):
     if request.user.has_perm('bboard.add_rubric'):
-        RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_order=True,
+        RubricFormSet = modelformset_factory(Rubric, fields=('name',), 
                                             can_delete=True, formset=RubricBaseFormSet)
         # RubricFormSet = modelformset_factory(Rubric, fields=('name',), can_order=True, can_delete=True)
 
@@ -329,7 +329,7 @@ def rubrics(request):
                 
                 # That is can to delete and rename, but cant reorder (no such Model column)...
                 formset.save()
-                return redirect('index')
+                return redirect('bboard:index')
 
                 
         else:

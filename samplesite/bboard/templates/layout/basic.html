@@ -1,9 +1,13 @@
 {% load static %}
+{% load bootstrap4 %}
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="UTF-8">
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery=True %}
     <title>{% block title %}Главная{% endblock %} :: Доска объявлений</title>
 </head>
 

@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'testapp',
     'captcha',
     'django.contrib.postgres',
+    'bootstrap4'
 ]
 
 MIDDLEWARE = [
@@ -159,3 +160,9 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/bboard/'
+
+BOOTSTRAP4 = {
+    'required_css_class': 'required',
+    'success_css_class': 'has-success',
+    'error_css_class': 'has-error',
+}

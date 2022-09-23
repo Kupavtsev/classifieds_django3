@@ -1,4 +1,5 @@
 {% extends "layout/basic.html" %}
+{% load bootstrap4 %}
 
 {% block title %}Добавление объявления{% endblock %}
 
@@ -9,16 +10,8 @@
 <form method="post">
     {% csrf_token %}
 
-    {% for i in form %}
-    <div>
-        <p>{{ i.name }}</p>
-        {{ i }}
-    </div>
-    {% endfor %}
-
-    <!-- Форма отрендерит себя сама -->
-    <!-- {{ form.as_p }} -->
-    <input type="submit" value="Добавить">
+    {% bootstrap_form form layout='horizontal' show_help=True %}
+    {% buttons submit='Добавить' %}{% endbuttons %}
 
 </form>
 {% endblock %}
