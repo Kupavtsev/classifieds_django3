@@ -1,4 +1,3 @@
-from pickle import TRUE
 from xml.dom import ValidationErr
 from django.db.models import Count, OuterRef, Exists, Prefetch
 from django.db.transaction import atomic
