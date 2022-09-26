@@ -9,7 +9,9 @@
 {% if bbs %}
 
     {% for bb in bbs %}
-        {% cycle 'bb1' 'bb2' 'bb3' as currentclass %}
+        {# this hack will hide strings #}
+        <!-- {% cycle 'bb1' 'bb2' 'bb3' as currentclass %} -->
+        
         <div class={{currentclass}}>
             
             {#<!-- <h2>{{ bb.title }}</h2> -->#}
