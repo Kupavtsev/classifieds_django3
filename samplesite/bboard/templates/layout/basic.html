@@ -1,5 +1,6 @@
 {% load static %}
 {% load bootstrap4 %}
+{% load filtersandtags %}
 
 <!DOCTYPE html>
 <html>
@@ -44,13 +45,17 @@
             {% endif %}
         {% endwith %}
         <br><br><br>
-        Цена:<br><br>
-        > 1000
+        
+        
+        {# {% lst ', ' '1' '2' '3' %} #}
+        {% ulist '1' '2' '3' %}
     </nav>
 
     <section>
         {% block content %}
         {% endblock %}
+        
+        
     </section>
 
 </body>
