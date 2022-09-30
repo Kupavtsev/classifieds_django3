@@ -56,7 +56,9 @@ urlpatterns = [
                               template_name='registration/password_confirmed.html'),
                               name='password_reset_complete'),
 
-    path('captcha/', include('captcha.urls'))
+    path('captcha/', include('captcha.urls')),
+
+    url('', include('social_django.urls', namespace='social'))
 ]
 
 

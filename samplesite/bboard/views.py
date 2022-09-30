@@ -1,6 +1,6 @@
 from xml.dom import ValidationErr
 from django.db.models import Count, OuterRef, Exists, Prefetch
-from django.db.transaction import atomic
+# from django.db.transaction import atomic
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from http.client import HTTPResponse
 
@@ -50,7 +50,7 @@ RC = Rubric.objects.annotate(Count('bb'))
 #           ========================================= 
 #           ---===          1 MAIN PAGE        ===---
 #           ========================================= 
-# 1.1
+# 1.1 main
 def index(request):
     # В зависимоти от контекста запроса, render ведет себя по разному
 
@@ -205,12 +205,9 @@ class BbUpdateView(UserPassesTestMixin, UpdateView):
 
 #           ---===    EDIT AD FORM - FUNC   ===---
 # 5.2
-@atomic                 # В этом контроллере будет действовать режим атомарных запросов
+# @atomic                 # В этом контроллере будет действовать режим атомарных запросов
 def edit(request, pk):
     bb = Bb.objects.get(pk=pk)
-    print('=' * 9)
-    print(bb)
-    print('=' * 9)
     if request.method == 'POST':
         bbf = BbForm(request.POST, instance=bb)
         if bbf.is_valid():
@@ -227,7 +224,7 @@ def edit(request, pk):
         return render(request, 'bboard/bb_form.html', context)
 
 # 5.3
-class BbDeleteView(DeleteView):
+class BbDeleteView(LoginRequiredMixin, DeleteView):
     model = Bb
     success_url = '/bboard/'
 

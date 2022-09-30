@@ -5,6 +5,11 @@ samplesite/bboard/__pycache__
 samplesite/bboard/migrations/__pycache__
 samplesite/samplesite/__pycache__
 
+samplesite/testapp/__pycache__
+samplesite/testapp/migrations/__pycache__/
+
 samplesite/samplesite/bboard/migrations
+
+samplesite/samplesite/.env
 
 cmd.exe

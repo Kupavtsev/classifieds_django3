@@ -27,6 +27,7 @@
             {{ user.username }}
         {% else %}
             <a href="/accounts/login/">Enter</a>
+            <a href="{% url "social:begin" "github" %}">Github</a>
         {% endif %}
     </header>
 
