@@ -1,3 +1,4 @@
+from django.contrib.messages import constants as messages
 from xml.dom import ValidationErr
 from django.db.models import Count, OuterRef, Exists, Prefetch
 # from django.db.transaction import atomic
@@ -155,8 +156,10 @@ class BbDetailView(DetailView):
 class BbCreateView(CreateView):
     template_name   = 'bboard/create.html'
     form_class      = BbForm
-    success_url     = reverse_lazy('index')
+    # success_url     = reverse_lazy('index')
     # success_url     = '/bboard/detail/{id}'
+    success_url     = '/{rubric_id}'
+    success_message = 'created!'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) # получаем контекст шаблона от метода базового класса
@@ -216,6 +219,7 @@ def edit(request, pk):
         if bbf.is_valid():
             # if bbf.has_changed():
             bbf.save()
+            messages.add_message(request, messages.SUCCESS, 'Объявление исправлено', extra_tags='first second')
             return HttpResponseRedirect(reverse('by_rubric',
                                         kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
         else:
