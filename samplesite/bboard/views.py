@@ -14,8 +14,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.core.paginator import Paginator
 from django.forms import modelformset_factory, BaseModelFormSet, inlineformset_factory,formset_factory
-# from django.forms.formsets import ORDERING_FIELD_NAME
 from django.forms.widgets import TextInput
+# from django.forms.formsets import ORDERING_FIELD_NAME
 
 from django.contrib.auth.views import PasswordChangeView, redirect_to_login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -24,6 +24,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from .models            import Bb, Rubric
 from .forms             import BbForm, SearchForm
+
+from .sessions import test_cookie
 
 
 # SQL filters
@@ -52,6 +54,7 @@ RC = Rubric.objects.annotate(Count('bb'))
 #           ========================================= 
 # 1.1 main
 def index(request):
+    test_cookie(request)
     # В зависимоти от контекста запроса, render ведет себя по разному
 
     if request.method == 'GET':     # не обязательно
