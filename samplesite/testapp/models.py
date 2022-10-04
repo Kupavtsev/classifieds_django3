@@ -47,8 +47,8 @@ class Spare(models.Model):
 
 class Machine(models.Model):
     name = models.CharField(max_length=30)
-    # spares = models.ManyToManyField(Spare, through='Kit',
-    #                                         through_fields=('machine', 'spare'))
+    spares = models.ManyToManyField(Spare)
+    # spares = models.ManyToManyField(Spare, through='Kit', through_fields=('machine', 'spare'))
 
 # https://stackoverflow.com/questions/26927705/django-migration-error-you-cannot-alter-to-or-from-m2m-fields-or-add-or-remove
 # class Kit(models.Model):

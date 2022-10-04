@@ -8,6 +8,11 @@
 {# <!-- ADVS --> #}
 {% if bbs %}
 
+    <form method="get">
+        {{ bbFilter.form }}
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </form>
+
     {% for bb in bbs %}
         {# this hack will hide strings #}
         <!-- {% cycle 'bb1' 'bb2' 'bb3' as currentclass %} -->
@@ -18,6 +23,7 @@
             
             <h2 ><a href="{% url 'bboard:detail' pk=bb.pk %}">{{ bb.title_and_price }}</a></h2>
             <p>{{ bb.content }}</p>
+            <p> {{ bb.kind }} </p>
             <p><a href="/bboard/{{ bb.rubric.pk }}/">
                     {{ bb.rubric.name }}</a></p>
             {% firstof bb.phone bb.email 'Контакт не указан' %}

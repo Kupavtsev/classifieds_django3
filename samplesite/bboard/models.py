@@ -11,8 +11,9 @@ def get_min_length():        # It works, but it doesn't show any messages!!!
     return min_length
 
 def validate_even(val):     # It works, but it doesn't show any messages!!!
-    if val % 2 != 0:
-        raise ValidationError(f'Число {val} нечетное', code='odd')
+    pass
+    # if val % 2 != 0:
+        # raise ValidationError(f'Число {val} нечетное', code='odd')
 
 
 #           ========================================= 
@@ -27,32 +28,26 @@ class Bb(models.Model):
                     RENT = 'r'
                     __empty__ = 'Выберите тип публикуемого объявления'
 
-    kind = models.CharField(
-        max_length=1,choices=Kinds.choices,default=Kinds.SELL
-        )
+    STATUS = (
+        ('Куплю', 'Куплю'), ('Продам', 'Продам'), ('Обменяю', 'Обменяю')
+    )
+
     title = models.CharField(
         max_length=50, verbose_name='Товар', 
         validators=[validators.MinLengthValidator(get_min_length)],
         # error_messages={'invalid': 'Минимальная длинна 5, максимальная 50'}   # it doesn't display any
                                     )
     # В необязательное поле можно занести пустое значение: null/blank = True
-    content = models.TextField(
-        null=True, blank=True, verbose_name='Описание'
-        )
-    price = models.FloatField(
-        null=True, blank=True, verbose_name="Цена",
-        # validators=[validate_even]
-        )
-    published = models.DateTimeField(
-        auto_now_add=True, db_index=True, verbose_name="Опубликовано"
-        )
-    changed = models.DateTimeField(
-        auto_now=True, db_index=True, verbose_name="Изменено"
-        )
+    content = models.TextField(null=True, blank=True, verbose_name='Описание')
+    price = models.FloatField(null=True, blank=True, verbose_name="Цена", validators=[validate_even])
+    published = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name="Опубликовано")
     rubric = models.ForeignKey(
         'Rubric', null=True, on_delete=models.PROTECT, verbose_name='Рубрика',
         limit_choices_to={'show': True} #  limit_choices_to в форме работает но отображается на сайте
         )
+    changed = models.DateTimeField(auto_now=True, db_index=True, verbose_name="Изменено")
+    kind = models.CharField(max_length=7, choices=STATUS, default=STATUS[1])
+    # kind = models.CharField(max_length=1, choices=Kinds.choices, default=Kinds.SELL)
                                     
 
     class Meta:
@@ -94,14 +89,3 @@ class Rubric(models.Model) :
         verbose_name_plural = 'Рубрики'
         verbose_name        = 'Рубрика'
         ordering            = ['name']
-
-
-
-# class AdvUser(models.Model):
-#     is_activated = models.BooleanField(default=True)
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-#     class Meta:
-#         verbose_name_plural = 'Активированные'
-#         verbose_name        = 'Активированный'
-#         ordering            = ['is_activated']

@@ -23,8 +23,8 @@ urlpatterns = [
 
     
     # 5 EDIT AD FORM - CLASS
-    path('edit/<int:pk>/', BbUpdateView.as_view(), name='edit'),
     # path('edit/<int:pk>/', BbUpdateView.as_view(), name='edit'),
+    path('edit/<int:pk>/', edit, name='edit'),
     path('delete/<int:pk>/', BbDeleteView.as_view(), name='delete'),
 
     # 4 Add new Advertisment

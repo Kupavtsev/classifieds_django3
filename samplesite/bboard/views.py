@@ -1,4 +1,4 @@
-from django.contrib.messages import constants as messages
+from django.contrib import messages
 from xml.dom import ValidationErr
 from django.db.models import Count, OuterRef, Exists, Prefetch
 # from django.db.transaction import atomic
@@ -23,10 +23,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # from django.http        import HttpResponse
 
-from .models            import Bb, Rubric
-from .forms             import BbForm, SearchForm
+from .models import Bb, Rubric
+from .forms import BbForm, SearchForm
 
 from .sessions import test_cookie
+from .filters import BbFilter
 
 
 # SQL filters
@@ -38,12 +39,9 @@ pr1 = Prefetch('bb_set', queryset=Bb.objects.order_by('-title'))
 r = Rubric.objects.prefetch_related(pr1).first()
 # for bb in r.bb_set.all(): print(bb.price, end=' ')
 # f3
-pr2 = Prefetch('bb_set',
-                queryset=Bb.objects.filter(price__gt=1000),
-                to_attr='expensive')
+pr2 = Prefetch('bb_set', queryset=Bb.objects.filter(price__gt=1000), to_attr='expensive')
 r2 = Rubric.objects.prefetch_related(pr2).get(pk=2)
-print(r2)
-for bb in r2.expensive: print(bb.price)
+# for bb in r2.expensive: print(bb.price)
 
 # GLOBALS
 rubricsAll   = Rubric.objects.all()
@@ -61,6 +59,8 @@ def index(request):
     if request.method == 'GET':     # не обязательно
         # rc = Rubric.objects.annotate(Count('bb'))
         bbs       = Bb.objects.all()
+        bbFilter = BbFilter(request.GET, queryset=bbs)
+        bbs = bbFilter.qs
         paginator = Paginator(bbs, 3)
         if "page" in request.GET:
             page_num = request.GET['page']
@@ -68,7 +68,7 @@ def index(request):
             page_num = 1
         page = paginator.get_page(page_num)
         # rubrics   = Rubric.objects.all()
-        context   = {'bbs': page.object_list, 'rubrics': rubricsAll, 'rc': RC, 'page': page, 'bbstotal': bbs}
+        context   = {'bbs': page.object_list, 'rubrics': rubricsAll, 'rc': RC, 'page': page, 'bbstotal': bbs, 'bbFilter': bbFilter}
         return render(request, 'bboard/index.html', context)
     else:
         return HTTPResponse('Wrong method: 405')
@@ -217,11 +217,10 @@ def edit(request, pk):
     if request.method == 'POST':
         bbf = BbForm(request.POST, instance=bb)
         if bbf.is_valid():
-            # if bbf.has_changed():
-            bbf.save()
-            messages.add_message(request, messages.SUCCESS, 'Объявление исправлено', extra_tags='first second')
-            return HttpResponseRedirect(reverse('by_rubric',
-                                        kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
+            if bbf.has_changed():
+                bbf.save()
+                messages.add_message(request, messages.SUCCESS, 'Объявление исправлено', extra_tags='first second')
+                return HttpResponseRedirect(reverse('bboard:by_rubric', kwargs={'rubric_id': bbf.cleaned_data['rubric'].pk}))
         else:
             context = {'form': bbf}
             return render(request, 'bboard/bb_form.html', context)

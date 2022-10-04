@@ -16,6 +16,7 @@
         <h2><a href="{% url 'bboard:detail' pk=bb.pk %}">{{ bb.title }}</a></h2>
         <p>{{ bb.content }}</p>
         <p><b>Цена:</b> {{ bb.price|currency }}</p>
+        <p> {{ bb.kind }} </p>
         <p>{{ bb.published|date:"d.m.Y H:i:s" }}</p>
         <p>Прошло {{ bb.published|timesince }}</p>
         

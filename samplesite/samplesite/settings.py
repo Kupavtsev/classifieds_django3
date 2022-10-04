@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'social_django',
     'captcha',
     'bootstrap4',
+    'django_filters',
 
     'bboard',
     'testapp',
