@@ -58,20 +58,23 @@
     </nav>
 
     <section id="mainSection">
+
         {% block content %}
         {% endblock %}
-        
-        
+                
     </section>
+
     <div id="siteSearch">
         <form method="get">
-            {# {{ bbFilter.form.as_p }} #}
-            {% bootstrap_form bbFilter.form layout='inline' show_help=False %}
+             {{ bbFilter.form.as_p }} 
+            {# {% bootstrap_form bbFilter.form layout='inline' show_help=False %} #}
             <button type="submit" class="btn btn-primary">Поиск</button>
         </form>
         
     </div>
+
     <footer id="pageFooter">Footer</footer>
+
 </body>
 
 </html>

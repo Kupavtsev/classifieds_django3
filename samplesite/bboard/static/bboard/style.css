@@ -37,11 +37,11 @@ header, footer, article, nav, div {
     grid-area: ads;
 }
 nav hl {
-    font-size: 28pt;
+    font-size: 16pt;
     text-transform: uppercase;
     text-align: center;
     /* color: bisque; */
-    background: url("bg.jpg") left / auto 100% no-repeat;
+    /* background: url("bg.jpg") left / auto 100% no-repeat; */
 }
 nav {
     grid-area: nav;

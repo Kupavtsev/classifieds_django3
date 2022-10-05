@@ -21,6 +21,11 @@ from django.forms.widgets import TextInput
 from django.contrib.auth.views import PasswordChangeView, redirect_to_login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
+# from django_filters.views import FilterView
+
+# from django_filters.rest_framework import DjangoFilterBackend
+# from rest_framework.filters import SearchFilter, OrderingFilter
+
 # from django.http        import HttpResponse
 
 from .models import Bb, Rubric
@@ -68,7 +73,7 @@ def index(request):
             page_num = 1
         page = paginator.get_page(page_num)
         # rubrics   = Rubric.objects.all()
-        context   = {'bbs': page.object_list, 'rubrics': rubricsAll, 'rc': RC, 'page': page, 'bbstotal': bbs, 'bbFilter': bbFilter}
+        context   = {'bbs': page.object_list,  'rc': RC, 'page': page, 'bbstotal': bbs, 'bbFilter': bbFilter}
         return render(request, 'bboard/index.html', context)
     else:
         return HTTPResponse('Wrong method: 405')
@@ -103,8 +108,14 @@ def by_rubric(request, rubric_id):
 # It mixdex class You Should avoid such a constructions!
 # 2.2
 class BbByRubricView(SingleObjectMixin, ListView):
+# class BbByRubricView(SingleObjectMixin, ListView, FilterView):
+    # model = Bb
     template_name = 'bboard/by_rubric.html'
     pk_url_kwarg: str = 'rubric_id'
+    # I'm not sure about it
+    # filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    # filterset_class = BbFilter
+    # queryset = Bb.objects.all()
 
     # Извлекаем рубкиру с заданным ключом
     def get(self, request, *args, **kwargs):
@@ -214,6 +225,10 @@ class BbUpdateView(UserPassesTestMixin, UpdateView):
 # @atomic                 # В этом контроллере будет действовать режим атомарных запросов
 def edit(request, pk):
     bb = Bb.objects.get(pk=pk)
+
+    bbFilter = BbFilter(request.GET,  queryset=Bb.objects.all())
+    bbs = bbFilter.qs
+
     if request.method == 'POST':
         bbf = BbForm(request.POST, instance=bb)
         if bbf.is_valid():
@@ -226,7 +241,7 @@ def edit(request, pk):
             return render(request, 'bboard/bb_form.html', context)
     else:
         bbf = BbForm(instance=bb)      
-        context = {'form': bbf}
+        context = {'form': bbf, 'bbs': bbs, 'bbFilter': bbFilter}
         return render(request, 'bboard/bb_form.html', context)
 
 # 5.3
