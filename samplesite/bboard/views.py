@@ -59,7 +59,7 @@ def index(request):
     if request.method == 'GET':     # не обязательно
         # rc = Rubric.objects.annotate(Count('bb'))
         bbs       = Bb.objects.all()
-        bbFilter = BbFilter(request.GET, queryset=bbs)
+        bbFilter = BbFilter(request.GET,  queryset=bbs)
         bbs = bbFilter.qs
         paginator = Paginator(bbs, 3)
         if "page" in request.GET:

@@ -1,25 +1,66 @@
-header hl {
-    font-size: 40pt;
+body {
+    display: grid;
+    grid-template-areas: 
+    "nav header header"
+    "nav article ads"
+    "nav footer ads";
+    grid-template-rows: 60px 1fr 60px;
+    grid-template-columns: 20% 1fr 20%;
+    grid-gap: 10px;
+    height: 50vh;
+    margin: 0;
+}
+header, footer, article, nav, div {
+    padding: 20px;
+    background: gold;
+}
+
+#pageHeader {
+    grid-area: header;
+}
+#pageHeader #username {
+    /* margin-left: 55%; */
+    float: right;
+}
+
+#pageFooter {
+    grid-area: footer;
+}
+/* #mainSection {
+    grid-area: article;
+    
+} */
+/* #mainNav {
+    grid-area: nav;
+} */
+#siteSearch {
+    grid-area: ads;
+}
+nav hl {
+    font-size: 28pt;
     text-transform: uppercase;
     text-align: center;
     /* color: bisque; */
-    /* background: url("bg.jpg") left / auto 100% no-repeat; */
+    background: url("bg.jpg") left / auto 100% no-repeat;
 }
 nav {
+    grid-area: nav;
     font-size: 16pt;
-    width: 190px;
-    float: left;
+    /* width: 200px; */
+    /* float: left; */
     }
+nav #rubrics {
+    margin-top: 20px;
+}
 nav a {
     display: block;
     margin: 10px 0px;
     text-decoration: none;
     }
 section {
-    margin-left: 210px;
-    margin-right: 70%;
+    grid-area: article;
 } 
 
-section .bb1 {
+/* section .bb1 {
     background-color: rgba(0, 0, 255, 0.11);
-}
+} */
