@@ -6,8 +6,8 @@ from captcha.fields import CaptchaField
 from .models import Bb, Rubric
 
 class BbForm(forms.ModelForm):
-    captcha = CaptchaField(label='Введите текст с картинки',
-                            error_messages={'invalid': 'Неправильный текст'})
+    # captcha = CaptchaField(label='Введите текст с картинки',
+    #                         error_messages={'invalid': 'Неправильный текст'})
     
     class Meta:
         model   = Bb

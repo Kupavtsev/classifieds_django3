@@ -1,18 +1,21 @@
 {% extends "layout/basic.html" %}
+{% load filtersandtags %}
 
 {% block title %} {{ bb.title }} {% endblock %}
 
 {% block content %}
 
-<p> Рубрика: {{ bb.rc.name }} </p>
+    <p> Рубрика: {{ bb.rubric }} </p>
 
-<p># {{ forloop.counter }}</p>
 
-<h2> {{ bb.title }} </h2>
-<p> {{ bb.content }} </p>
-<p> Цена: {{ bb.price|default:'No price!' }} </p>
-<p> {{ bb.kind }} </p>
-<p><a href="{% url 'bboard:edit' pk=bb.pk %}">edit</a>
-    <a href="{% url 'bboard:delete' pk=bb.pk %}">delete</a>
-</p>
+    <h2> {{ bb.title }} </h2>
+    <p> {{ bb.content }} </p>
+    <p><b>Цена:</b> {{ bb.price|currency }}</p>
+    <p> Цена: {{ bb.price|default:'No price!' }} </p>
+    <p> {{ bb.kind }} </p>
+    <p><b>Пользователь:</b> {{ bb.user }}</p>
+
+    <p><a href="{% url 'bboard:edit' pk=bb.pk %}">edit</a>
+    <a href="{% url 'bboard:delete' pk=bb.pk %}">delete</a></p>
+
 {% endblock %}

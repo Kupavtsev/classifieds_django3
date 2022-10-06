@@ -24,6 +24,7 @@
             <p><a href="/bboard/{{ bb.rubric.pk }}/">
                     {{ bb.rubric.name }}</a></p>
             {% firstof bb.phone bb.email 'Контакт не указан' %}
+            <p>Пользователь: {{ bb.user }}</p>
             <p >Опубликовано: {{ bb.published|date:"DATETIME_FORMAT" }}</p>
             
             {#<!-- <p class={{currentclass}}>Опубликовано: {{ bb.published|date:"d.m.Y H:i:s" }}</p> -->#}

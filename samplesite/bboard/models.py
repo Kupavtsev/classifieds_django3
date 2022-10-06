@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 # from django.contrib.auth.models import User
 from django.core import validators
+from django.contrib.auth.models import User
 
 #           ========================================= 
 # My validators
@@ -48,6 +49,7 @@ class Bb(models.Model):
     changed = models.DateTimeField(auto_now=True, db_index=True, verbose_name="Изменено")
     kind = models.CharField(max_length=7, choices=STATUS, default=STATUS[1])
     # kind = models.CharField(max_length=1, choices=Kinds.choices, default=Kinds.SELL)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор', db_index=True)
                                     
 
     class Meta:

@@ -2,7 +2,8 @@ from django.contrib import messages
 from xml.dom import ValidationErr
 from django.db.models import Count, OuterRef, Exists, Prefetch
 # from django.db.transaction import atomic
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
+
 from http.client import HTTPResponse
 
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
@@ -109,17 +110,17 @@ def by_rubric(request, rubric_id):
 # 2.2
 class BbByRubricView(SingleObjectMixin, ListView):
 # class BbByRubricView(SingleObjectMixin, ListView, FilterView):
-    model = Bb
+    # model = Bb
     template_name = 'bboard/by_rubric.html'
     pk_url_kwarg: str = 'rubric_id'
     # queryset = Bb.objects.all()
 
     # Извлекаем рубкиру с заданным ключом
     def get(self, request, *args, **kwargs):
-        self.object = self.get_object(queryset=Rubric.objects.all())
-        return super().get(request, *args, **kwargs)
+        self.object = self.get_object(queryset=Rubric.objects.all())    # вы можете передать более конкретныйget_object() - 
+        return super().get(request, *args, **kwargs)                    # метод для возврата более конкретного объекта
 
-    def get_context_data(self, **kwargs: any):
+    def get_context_data(self, **kwargs: any):          # может использоваться для передачи содержимого или параметров вне модели в шаблон
         context = super().get_context_data(**kwargs)
         context['bbs'] = context['object_list']         # по умолчанию хранит записи из ListView
         context['current_rubric'] = self.object         # берем рубрику из get
@@ -128,7 +129,7 @@ class BbByRubricView(SingleObjectMixin, ListView):
         context['bbFilter'] = BbFilterRubrics(self.request.GET, queryset=self.get_queryset())
         return context
 
-    def get_queryset(self):
+    def get_queryset(self):                             # метод может возвращать специализированный список объектов  
         return self.object.bb_set.all()
 # 2.3
 class BbByRubricViewListView(ListView):
@@ -176,6 +177,7 @@ class BbCreateView(CreateView):
         return context
 # 4.2
 class BbAddFormView(LoginRequiredMixin, FormView):
+    model = Bb
     template_name   = 'bboard/create.html'
     form_class      = BbForm
     initial = {'price': 0.0}
@@ -185,7 +187,13 @@ class BbAddFormView(LoginRequiredMixin, FormView):
         context['rc'] = RC
         return context
 
+    # def get_form(self, form_class=None):
+    #     self.object = self.request.user
+    #     return Bb(**self.get_form_kwargs(), instance=self.object)
+
     def form_valid(self, form):
+        self.user = self.request.user
+        print(self.user)
         form.save()
         return super().form_valid(form)
 
@@ -193,6 +201,7 @@ class BbAddFormView(LoginRequiredMixin, FormView):
     def get_form(self, form_class = None):
         self.object = super().get_form(form_class)
         return self.object
+
 
     # Получаем доступ к pk из object
     def get_success_url(self):
@@ -217,6 +226,12 @@ class BbUpdateView(UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         return self.request.user.is_staff
+
+    def get_object(self, queryset=None):                    # This is making possible to edit only for author
+        obj = super().get_object(queryset=queryset)
+        if obj.user != self.request.user:                   
+            raise Http404()
+        return obj
 
 #           ---===    EDIT AD FORM - FUNC   ===---
 # 5.2
