@@ -32,7 +32,7 @@ from .models import Bb, Rubric
 from .forms import BbForm, SearchForm
 
 from .sessions import test_cookie
-from .filters import BbFilter
+from .filters import BbFilter, BbFilterRubrics
 
 
 # SQL filters
@@ -109,12 +109,9 @@ def by_rubric(request, rubric_id):
 # 2.2
 class BbByRubricView(SingleObjectMixin, ListView):
 # class BbByRubricView(SingleObjectMixin, ListView, FilterView):
-    # model = Bb
+    model = Bb
     template_name = 'bboard/by_rubric.html'
     pk_url_kwarg: str = 'rubric_id'
-    # I'm not sure about it
-    # filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    # filterset_class = BbFilter
     # queryset = Bb.objects.all()
 
     # Извлекаем рубкиру с заданным ключом
@@ -128,6 +125,7 @@ class BbByRubricView(SingleObjectMixin, ListView):
         context['current_rubric'] = self.object         # берем рубрику из get
         context['rc'] = RC
         context['gt1000'] = r2.expensive
+        context['bbFilter'] = BbFilterRubrics(self.request.GET, queryset=self.get_queryset())
         return context
 
     def get_queryset(self):

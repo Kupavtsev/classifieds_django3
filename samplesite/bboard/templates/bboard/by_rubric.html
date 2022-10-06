@@ -10,7 +10,8 @@
     <a href="{% url 'bboard:bbs' rubric.pk %}">Редактировать объявления</a>
 
 
-    {% for bb in bbs %}
+    {% for bb in bbFilter.qs %}
+    {# {% for bb in bbs %} #}
         <div>
             <p># {{ forloop.counter }}</p>
             <!-- <h2>{{ bb.title }}</h2> -->

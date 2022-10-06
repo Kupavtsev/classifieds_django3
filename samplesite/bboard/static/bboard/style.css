@@ -5,7 +5,7 @@ body {
     "nav article ads"
     "nav footer ads";
     grid-template-rows: 60px 1fr 60px;
-    grid-template-columns: 20% 1fr 20%;
+    grid-template-columns: 240px 1fr 240px;
     grid-gap: 10px;
     height: 50vh;
     margin: 0;

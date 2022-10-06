@@ -1,9 +1,15 @@
 import django_filters
-from django_filters import DateFilter, CharFilter, RangeFilter
+from django_filters import DateFilter, CharFilter, RangeFilter, ChoiceFilter
 from .models import Bb, Rubric
 
 
 class BbFilter(django_filters.FilterSet):
+    CHOICES = (
+        ('ascending', 'Ascending'),
+        ('descending', 'Descending')
+    )
+    ordering = ChoiceFilter(label='Ordering', choices=CHOICES, method='filter_by_order') 
+
     start_date = DateFilter(field_name='published', lookup_expr='gte')
     end_date = DateFilter(field_name='published', lookup_expr='lte')
     title = CharFilter(field_name='title', lookup_expr='icontains')
@@ -14,6 +20,16 @@ class BbFilter(django_filters.FilterSet):
         fields = ['rubric', 'kind']
         # exclude = [ 'title', 'price', 'kind']
 
+    def filter_by_order(self, queryset, name, value):
+        expression = 'published' if value == 'ascending' else '-published'
+        return queryset.order_by(expression)
+
+class BbFilterRubrics(BbFilter, django_filters.FilterSet):
+    class Meta:
+        model = Bb
+        # fields = '__all__'
+        fields = ['kind']
+        # exclude = [ 'title', 'price', 'kind']
 
 '''
 class F(django_filters.FilterSet):
