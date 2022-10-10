@@ -192,9 +192,9 @@ class BbAddFormView(LoginRequiredMixin, FormView):
     #     return Bb(**self.get_form_kwargs(), instance=self.object)
 
     def form_valid(self, form):
-        self.user = self.request.user
-        print(self.user)
-        form.save()
+        bb_ad = form.save(commit=False)
+        bb_ad.user = self.request.user
+        bb_ad.save()
         return super().form_valid(form)
 
     # мы сохраняем полученную форму в object
@@ -210,7 +210,7 @@ class BbAddFormView(LoginRequiredMixin, FormView):
 
 
 #           ========================================= 
-#           ---===    5 EDIT AD FORM - CLASS   ===---
+#           ---=== 5 FORM TO EDIT ONE AD CLASS ===---
 #           ========================================= 
 # 5.1
 class BbUpdateView(UserPassesTestMixin, UpdateView):
@@ -225,7 +225,7 @@ class BbUpdateView(UserPassesTestMixin, UpdateView):
         return context
 
     def test_func(self):
-        return self.request.user.is_staff
+        return self.request.user.is_staff or self.request.user
 
     def get_object(self, queryset=None):                    # This is making possible to edit only for author
         obj = super().get_object(queryset=queryset)

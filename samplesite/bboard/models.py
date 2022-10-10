@@ -5,7 +5,7 @@ from django.core import validators
 from django.contrib.auth.models import User
 
 #           ========================================= 
-# My validators
+#           ---===         My validators       ===---
 #           ========================================= 
 def get_min_length():        # It works, but it doesn't show any messages!!!
     min_length = 3           # But before testapp, it works correctly
@@ -18,7 +18,7 @@ def validate_even(val):     # It works, but it doesn't show any messages!!!
 
 
 #           ========================================= 
-# Main class of ads
+#           ---===      Main class of ads      ===---
 #           ========================================= 
 class Bb(models.Model):
 
