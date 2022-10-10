@@ -1,6 +1,8 @@
 from django.urls import path
 from .models            import Bb
 
+from emails_handler import mail_send
+
 from .views import (index, BbIndexView,
                    by_rubric, BbByRubricView, BbByRubricViewListView,
                    BbCreateView, BbAddFormView,
@@ -11,6 +13,9 @@ from .views import (index, BbIndexView,
 app_name = 'bboard'
 
 urlpatterns = [
+
+    # 8 Emails
+    path('email_send', mail_send, name='mail_send'),
 
     # 7 Edit/Validation in forms
     path('bbs/<int:rubric_id>', bbs, name='bbs'),

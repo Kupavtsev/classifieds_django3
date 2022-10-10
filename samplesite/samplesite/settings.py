@@ -186,3 +186,12 @@ BOOTSTRAP4 = {
     'success_css_class': 'has-success',
     'error_css_class': 'has-error',
 }
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'login@dot-tech.ru'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
