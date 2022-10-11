@@ -117,7 +117,7 @@ class BbByRubricView(SingleObjectMixin, ListView):
 
     # Извлекаем рубкиру с заданным ключом
     def get(self, request, *args, **kwargs):
-        self.object = self.get_object(queryset=Rubric.objects.all())    # вы можете передать более конкретныйget_object() - 
+        self.object = self.get_object(queryset=Rubric.objects.all())    # вы можете передать более конкретный get_object() - 
         return super().get(request, *args, **kwargs)                    # метод для возврата более конкретного объекта
 
     def get_context_data(self, **kwargs: any):          # может использоваться для передачи содержимого или параметров вне модели в шаблон
@@ -180,26 +180,41 @@ class BbAddFormView(LoginRequiredMixin, FormView):
     model = Bb
     template_name   = 'bboard/create.html'
     form_class      = BbForm
-    initial = {'price': 0.0}
+    initial = {'price': 0.0,}
 
     def get_context_data(self, *args, **kwargs: any):
         context = super().get_context_data(*args, **kwargs)
         context['rc'] = RC
+        # context['user'] = self.request.user         # we have here user name
         return context
 
     # def get_form(self, form_class=None):
     #     self.object = self.request.user
+    #     print(self.object)
     #     return Bb(**self.get_form_kwargs(), instance=self.object)
 
     def form_valid(self, form):
-        self.user = self.request.user
-        print(self.user)
+        # self.user = self.request.user
+        # print(self.user)
         form.save()
+
+        new_post = form.save(commit=False)
+        # print('='*9)
+        # print(self.object.user)
+        # print(new_post.user)
+        # print('='*9)
+        new_post.user = self.request.user
+        new_post.save()
+
         return super().form_valid(form)
 
     # мы сохраняем полученную форму в object
     def get_form(self, form_class = None):
         self.object = super().get_form(form_class)
+        # self.object.user = self.request.user
+        # print('='*9)
+        # print(self.object.user)               # username
+        # print('='*9)
         return self.object
 
 
@@ -214,6 +229,7 @@ class BbAddFormView(LoginRequiredMixin, FormView):
 #           ========================================= 
 # 5.1
 class BbUpdateView(UserPassesTestMixin, UpdateView):
+# class BbUpdateView(UserPassesTestMixin, UpdateView):
     model = Bb
     form_class = BbForm
     # success_url = reverse_lazy('detail')
@@ -225,11 +241,12 @@ class BbUpdateView(UserPassesTestMixin, UpdateView):
         return context
 
     def test_func(self):
-        return self.request.user.is_staff
+        return self.request.user.is_staff or self.request.user
 
     def get_object(self, queryset=None):                    # This is making possible to edit only for author
         obj = super().get_object(queryset=queryset)
         if obj.user != self.request.user:                   
+        # if obj.author != self.request.user:                   
             raise Http404()
         return obj
 

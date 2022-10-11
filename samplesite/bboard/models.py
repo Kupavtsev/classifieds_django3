@@ -49,7 +49,8 @@ class Bb(models.Model):
     changed = models.DateTimeField(auto_now=True, db_index=True, verbose_name="Изменено")
     kind = models.CharField(max_length=7, choices=STATUS, default=STATUS[1])
     # kind = models.CharField(max_length=1, choices=Kinds.choices, default=Kinds.SELL)
-    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Автор', db_index=True)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='User')
+    # author =  models.CharField(max_length=50, null=True, blank=True, verbose_name='Автор', default=None)      # am I need this to work with admin as user?
                                     
 
     class Meta:
