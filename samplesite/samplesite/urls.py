@@ -24,6 +24,9 @@ from django.contrib.auth.views import (LoginView, LogoutView,
 
 
 from bboard.views       import PassChg
+from .router import router
+
+
 
 urlpatterns = [
     path('bboard/', include('bboard.urls')),
@@ -57,8 +60,8 @@ urlpatterns = [
                               name='password_reset_complete'),
 
     path('captcha/', include('captcha.urls')),
-
-    url('', include('social_django.urls', namespace='social'))
+    url('', include('social_django.urls', namespace='social')),
+    path('api/', include(router.urls))
 ]
 
 

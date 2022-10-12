@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'captcha',
     'bootstrap4',
     'django_filters',
-    #  'rest_framework',
+     'rest_framework',
 
     'bboard',
     'testapp',
