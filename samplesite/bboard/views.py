@@ -27,12 +27,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # from django_filters.rest_framework import DjangoFilterBackend
 # from rest_framework.filters import SearchFilter, OrderingFilter
 
-# from django.http        import HttpResponse
+# from django.http import HttpResponse
 
 from .models import Bb, Rubric
 from .forms import BbForm, SearchForm
 
-from .sessions import test_cookie
+from bboard.assets.sessions import test_cookie
 from .filters import BbFilter, BbFilterRubrics
 
 

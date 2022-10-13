@@ -1,7 +1,7 @@
 from django.urls import path
 from .models            import Bb
 
-from .emails_handler import mail_send
+from bboard.assets.emails_handler import mail_send
 from . import views
 
 

@@ -1,0 +1,3 @@
+Dear {{ user }}, this template created at bboard/templates/email/letter.txt
+
+Good Luck!
