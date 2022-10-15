@@ -21,6 +21,7 @@ from django.contrib.auth.views import (LoginView, LogoutView,
                                        PasswordChangeDoneView, PasswordChangeView,
                                        PasswordResetView, PasswordResetDoneView,
                                        PasswordResetConfirmView, PasswordResetCompleteView)
+from rest_framework.authtoken import views
 
 
 from bboard.views       import PassChg
@@ -61,7 +62,8 @@ urlpatterns = [
 
     path('captcha/', include('captcha.urls')),
     url('', include('social_django.urls', namespace='social')),
-    path('api/', include(router.urls))
+    path('api/', include(router.urls)),
+    path('api-token-auth/', views.obtain_auth_token, name='api_token_auth')
 ]
 
 

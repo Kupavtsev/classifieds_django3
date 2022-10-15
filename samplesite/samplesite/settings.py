@@ -30,7 +30,7 @@ SECRET_KEY = env.str('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default = False)
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'captcha',
     'bootstrap4',
     'django_filters',
-     'rest_framework',
+    'rest_framework',
+    'rest_framework.authtoken',
 
     'bboard',
     'testapp',
@@ -135,6 +136,18 @@ DATABASES = {
         default='sqlite:////tmp/my-tmp-sqlite.db'
     )
 }
+
+# We put this just in neccesary view class
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
