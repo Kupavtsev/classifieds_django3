@@ -60,12 +60,12 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'samplesite.urls'
@@ -92,6 +92,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'samplesite.wsgi.application'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 

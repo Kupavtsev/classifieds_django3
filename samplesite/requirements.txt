@@ -10,7 +10,7 @@ cryptography==38.0.1
 defusedxml==0.7.1
 Django==3.2.7
 django-bootstrap4==22.2
-django-debug-toolbar==3.2.2
+django-debug-toolbar==3.2.3
 django-environ==0.9.0
 django-filter==22.1
 django-ranged-response==0.2.0

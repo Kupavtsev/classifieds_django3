@@ -30,6 +30,7 @@ from .router import router
 
 
 urlpatterns = [
+    path('__debug__/', include('debug_toolbar.urls')),
     path('bboard/', include('bboard.urls')),
     path('admin/', admin.site.urls),
 
