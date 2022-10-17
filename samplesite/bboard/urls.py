@@ -8,6 +8,8 @@ from . import views
 app_name = 'bboard'
 
 urlpatterns = [
+    # 9 Cabinet
+    path('cabinet/', views.PrivateCabinet.as_view(), name='cabinet'),
 
     # 8 Emails
     path('email_send/', mail_send, name='mail_send'),

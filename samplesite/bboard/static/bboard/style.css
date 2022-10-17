@@ -18,7 +18,7 @@ header, footer, article, nav, div {
 #pageHeader {
     grid-area: header;
 }
-#pageHeader #username {
+#pageHeader .username {
     /* margin-left: 55%; */
     float: right;
 }

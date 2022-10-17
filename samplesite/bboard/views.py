@@ -115,7 +115,7 @@ class BbByRubricView(SingleObjectMixin, ListView):
     pk_url_kwarg: str = 'rubric_id'
     # queryset = Bb.objects.all()
 
-    # Извлекаем рубкиру с заданным ключом
+    # Извлекаем рубкиру с заданным ключом pk_url_kwarg
     def get(self, request, *args, **kwargs):
         self.object = self.get_object(queryset=Rubric.objects.all())    # вы можете передать более конкретный get_object() - 
         return super().get(request, *args, **kwargs)                    # метод для возврата более конкретного объекта
@@ -130,6 +130,7 @@ class BbByRubricView(SingleObjectMixin, ListView):
         return context
 
     def get_queryset(self):                             # метод может возвращать специализированный список объектов  
+        
         return self.object.bb_set.all()
 # 2.3
 class BbByRubricViewListView(ListView):
@@ -454,3 +455,23 @@ def formset_processing(request):
         formset = FS()
         context = {'formset': formset}
         return render(request, 'bboard/formset.html', context)
+
+
+#           ========================================= 
+#           ---===      10 Private Cabinet     ===---
+#           =========================================
+
+class PrivateCabinet(ListView):
+    model = Bb
+    template_name: str = 'bboard/cabinet.html'
+    context_object_name: str = 'bbs'
+    # context_object_name: str = ''
+
+    # def get_context_data(self, *args, **kwargs: any):
+    #     context = super().get_context_data(*args, **kwargs)
+    #     context['rc'] = RC
+    #     return context
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(user = self.request.user).order_by('published')
