@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 import environ
 
@@ -93,6 +93,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'samplesite.wsgi.application'
 
+# debug_toolbar
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
@@ -107,6 +108,16 @@ AUTHENTICATION_BACKENDS = (
 
 SOCIAL_AUTH_GITHUB_KEY = env.str('SOCIAL_AUTH_GITHUB_KEY')
 SOCIAL_AUTH_GITHUB_SECRET = env.str('SOCIAL_AUTH_GITHUB_SECRET')
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'bboard/cache'),
+
+    }
+}
+
 
 # http://127.0.0.1:8000/complete/github/
 

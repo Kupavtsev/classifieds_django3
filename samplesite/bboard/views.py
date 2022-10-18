@@ -22,6 +22,9 @@ from django.forms.widgets import TextInput
 from django.contrib.auth.views import PasswordChangeView, redirect_to_login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
+
 # from django_filters.views import FilterView
 
 # from django_filters.rest_framework import DjangoFilterBackend
@@ -50,7 +53,12 @@ r2 = Rubric.objects.prefetch_related(pr2).get(pk=2)
 # for bb in r2.expensive: print(bb.price)
 
 # GLOBALS
-rubricsAll   = Rubric.objects.all()
+# rubricsAll = cache.get('rubrics_all')
+# if not rubricsAll:
+#     rubricsAll = Rubric.objects.all()
+#     cache.set('rubrics_all', rubricsAll, 60*6)
+rubricsAll = Rubric.objects.all()
+
 RC = Rubric.objects.annotate(Count('bb'))
 
 
@@ -58,6 +66,7 @@ RC = Rubric.objects.annotate(Count('bb'))
 #           ---===          1 MAIN PAGE        ===---
 #           ========================================= 
 # 1.1 main
+# @cache_page(120)
 def index(request):
     test_cookie(request)
     # В зависимоти от контекста запроса, render ведет себя по разному
@@ -117,7 +126,11 @@ class BbByRubricView(SingleObjectMixin, ListView):
 
     # Извлекаем рубкиру с заданным ключом pk_url_kwarg
     def get(self, request, *args, **kwargs):
-        self.object = self.get_object(queryset=Rubric.objects.all())    # вы можете передать более конкретный get_object() - 
+        # self.object = cache.get('current_rubric')
+        # if not self.object:
+        #     self.object = self.get_object(queryset=Rubric.objects.all())    
+        #     cache.set('current_rubric', self.object, 120)
+        self.object = self.get_object(queryset=Rubric.objects.all())    # вы можете передать более конкретный get_object()
         return super().get(request, *args, **kwargs)                    # метод для возврата более конкретного объекта
 
     def get_context_data(self, **kwargs: any):          # может использоваться для передачи содержимого или параметров вне модели в шаблон
