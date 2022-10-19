@@ -63,6 +63,8 @@ urlpatterns = [
 
     path('captcha/', include('captcha.urls')),
     url('', include('social_django.urls', namespace='social')),
+
+    
     path('api/', include(router.urls)),
     path('api-token-auth/', views.obtain_auth_token, name='api_token_auth')
 ]

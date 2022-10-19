@@ -1,8 +1,9 @@
+import re
 from django.contrib import messages
 from xml.dom import ValidationErr
 from django.db.models import Count, OuterRef, Exists, Prefetch
 # from django.db.transaction import atomic
-from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404, JsonResponse
 
 from http.client import HTTPResponse
 
@@ -29,6 +30,9 @@ from django.core.cache import cache
 
 # from django_filters.rest_framework import DjangoFilterBackend
 # from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 # from django.http import HttpResponse
 
@@ -37,6 +41,8 @@ from .forms import BbForm, SearchForm
 
 from bboard.assets.sessions import test_cookie
 from .filters import BbFilter, BbFilterRubrics
+
+from .serializers import RubricSerializer
 
 
 # SQL filters
@@ -488,3 +494,43 @@ class PrivateCabinet(ListView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(user = self.request.user).order_by('published')
+
+
+#           ========================================= 
+#           ---===              11 API         ===---
+#           =========================================
+
+
+@api_view(['GET', 'POST'])
+def api_rubrics(request):
+    if request.method == 'GET':
+        rubrics = rubricsAll
+        serializer = RubricSerializer(rubrics, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = RubricSerializer(data=request.data)
+        print('='*9)
+        print(request.data)
+        print('='*9)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
+def api_rubrics_detail(request, pk):
+    rubric = Rubric.objects.get(pk=pk)
+    if request.method == 'GET':
+        serializer = RubricSerializer(rubric)
+        return Response(serializer.data)
+    elif request.method == 'PUT' or request.method == 'PATCH':
+        serializer = RubricSerializer(rubric, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        rubric.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
