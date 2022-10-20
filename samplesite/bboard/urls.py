@@ -10,8 +10,10 @@ app_name = 'bboard'
 
 urlpatterns = [
     #10 API
-    path('api/rubrics/<int:pk>', views.api_rubrics_detail),
-    path('api/rubrics', views.api_rubrics),
+    path('api/rubrics/<int:pk>', views.ApiRubricDetail.as_view()),
+    # path('api/rubrics/<int:pk>', views.api_rubrics_detail),
+    path('api/rubrics', views.ApiRubrics.as_view()),
+    # path('api/rubrics', views.api_rubrics),
     # 9 Cabinet
     path('cabinet/', views.PrivateCabinet.as_view(), name='cabinet'),
     # 8 Emails

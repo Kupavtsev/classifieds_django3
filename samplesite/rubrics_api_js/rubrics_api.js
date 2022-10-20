@@ -1,5 +1,10 @@
 const domain = 'http://127.0.0.1:8000/';
 
+
+const username = 'username';
+const password = 'password';
+const credentials = window.btoa(username + ':' + password);
+
 let list = document.getElementById('list');
 let listLoader = new XMLHttpRequest();
 
@@ -95,6 +100,8 @@ function rubricDelete(e) {
 function rubricLoad(e) {
     e.preventDefault()
     rubricLoader.open('GET', e.target.href, true);
+    rubricLoader.setRequestHeader('Authorization', 'Basic ' + credentials)
+    console.log('Authorization', 'Basic' + credentials)
     rubricLoader.send()
 }
 

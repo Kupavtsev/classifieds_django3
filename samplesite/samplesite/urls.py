@@ -24,7 +24,7 @@ from django.contrib.auth.views import (LoginView, LogoutView,
 from rest_framework.authtoken import views
 
 
-from bboard.views       import PassChg
+from bboard.views import PassChg
 from .router import router
 
 

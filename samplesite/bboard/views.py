@@ -30,9 +30,11 @@ from django.core.cache import cache
 
 # from django_filters.rest_framework import DjangoFilterBackend
 # from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework import status
+from rest_framework import status, generics
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view          # we dont need it with CBV and generics
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 # from django.http import HttpResponse
 
@@ -42,7 +44,7 @@ from .forms import BbForm, SearchForm
 from bboard.assets.sessions import test_cookie
 from .filters import BbFilter, BbFilterRubrics
 
-from .serializers import RubricSerializer
+from bboard.api.serializers import RubricSerializer
 
 
 # SQL filters
@@ -497,7 +499,7 @@ class PrivateCabinet(ListView):
 
 
 #           ========================================= 
-#           ---===              11 API         ===---
+#           ---===     11.2 REST API FBV       ===---
 #           =========================================
 
 
@@ -534,3 +536,17 @@ def api_rubrics_detail(request, pk):
     elif request.method == 'DELETE':
         rubric.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+#           ========================================= 
+#           ---===      11.2 REST API CBV      ===---
+#           =========================================
+
+class ApiRubrics(generics.ListCreateAPIView):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
+
+class ApiRubricDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Rubric.objects.all()
+    serializer_class = RubricSerializer
+    permission_classes = (IsAuthenticated,)
