@@ -1,4 +1,5 @@
 import re
+from tkinter import EXCEPTION
 from django.contrib import messages
 from xml.dom import ValidationErr
 from django.db.models import Count, OuterRef, Exists, Prefetch
@@ -36,6 +37,8 @@ from rest_framework.decorators import api_view          # we dont need it with C
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
+# from loguru import logger
+
 # from django.http import HttpResponse
 
 from .models import Bb, Rubric
@@ -46,6 +49,8 @@ from .filters import BbFilter, BbFilterRubrics
 
 from bboard.api.serializers import RubricSerializer
 
+
+# logger.add('logs/debug_views.log', format="{time} {level}, {message}", level="DEBUG", rotation='100 KB')
 
 # SQL filters
 # f1
@@ -179,7 +184,7 @@ class BbDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['rc'] = RC
         return context
-
+        # render('bboard/index.html') 
 
 #           ========================================= 
 #           ---===   4 Add new Advertisment    ===---
@@ -202,7 +207,7 @@ class BbAddFormView(LoginRequiredMixin, FormView):
     model = Bb
     template_name   = 'bboard/create.html'
     form_class      = BbForm
-    initial = {'price': 0.0,}
+    initial = {'price': 0,}
 
     def get_context_data(self, *args, **kwargs: any):
         context = super().get_context_data(*args, **kwargs)

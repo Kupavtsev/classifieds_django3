@@ -262,7 +262,7 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'django-site.log'),
+            'filename': os.path.join(BASE_DIR, 'logs/django-site.log'),
             'maxBytes': 1048576,
             'backupCount': 10,
             'formatter': 'simple',
