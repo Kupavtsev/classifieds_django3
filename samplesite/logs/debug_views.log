@@ -1,0 +1,584 @@
+2022-10-21T21:24:58.161081+0300 ERROR, An error has been caught in function '_get_response', process 'MainProcess' (9276), thread 'Thread-1' (6340):
+Traceback (most recent call last):
+
+  File "C:\Program Files\Python39\lib\threading.py", line 912, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x000001CE60ADB670>
+    └ <Thread(Thread-1, started daemon 6340)>
+
+  File "C:\Program Files\Python39\lib\threading.py", line 954, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x000001CE60ADB3A0>
+    └ <Thread(Thread-1, started daemon 6340)>
+
+  File "C:\Program Files\Python39\lib\threading.py", line 892, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(Thread-1, started daemon 6340)>
+    │    │        │    └ (<socket.socket fd=1100, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 8000), raddr...
+    │    │        └ <Thread(Thread-1, started daemon 6340)>
+    │    └ <bound method ThreadingMixIn.process_request_thread of <django.core.servers.basehttp.WSGIServer object at 0x000001CE64FC06A0>>
+    └ <Thread(Thread-1, started daemon 6340)>
+
+  File "C:\Program Files\Python39\lib\socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+    │    │              │        └ ('127.0.0.1', 64299)
+    │    │              └ <socket.socket fd=1100, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 8000), raddr=...
+    │    └ <function BaseServer.finish_request at 0x000001CE634D0160>
+    └ <django.core.servers.basehttp.WSGIServer object at 0x000001CE64FC06A0>
+
+  File "C:\Program Files\Python39\lib\socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    │    │                   │        │               └ <django.core.servers.basehttp.WSGIServer object at 0x000001CE64FC06A0>
+    │    │                   │        └ ('127.0.0.1', 64299)
+    │    │                   └ <socket.socket fd=1100, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 8000), raddr=...
+    │    └ <class 'django.core.servers.basehttp.WSGIRequestHandler'>
+    └ <django.core.servers.basehttp.WSGIServer object at 0x000001CE64FC06A0>
+
+  File "C:\Program Files\Python39\lib\socketserver.py", line 747, in __init__
+    self.handle()
+    │    └ <function WSGIRequestHandler.handle at 0x000001CE63AAA8B0>
+    └ <django.core.servers.basehttp.WSGIRequestHandler object at 0x000001CE651CDB50>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\servers\basehttp.py", line 176, in handle
+    self.handle_one_request()
+    │    └ <function WSGIRequestHandler.handle_one_request at 0x000001CE63AAA940>
+    └ <django.core.servers.basehttp.WSGIRequestHandler object at 0x000001CE651CDB50>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\servers\basehttp.py", line 201, in handle_one_request
+    handler.run(self.server.get_app())
+    │       │   │    │      └ <function WSGIServer.get_app at 0x000001CE63AA8DC0>
+    │       │   │    └ <django.core.servers.basehttp.WSGIServer object at 0x000001CE64FC06A0>
+    │       │   └ <django.core.servers.basehttp.WSGIRequestHandler object at 0x000001CE651CDB50>
+    │       └ <function BaseHandler.run at 0x000001CE63A94790>
+    └ <django.core.servers.basehttp.ServerHandler object at 0x000001CE651CDB80>
+
+  File "C:\Program Files\Python39\lib\wsgiref\handlers.py", line 137, in run
+    self.result = application(self.environ, self.start_response)
+    │    │        │           │    │        │    └ <function BaseHandler.start_response at 0x000001CE63A94AF0>
+    │    │        │           │    │        └ <django.core.servers.basehttp.ServerHandler object at 0x000001CE651CDB80>
+    │    │        │           │    └ {'ALLUSERSPROFILE': 'C:\\ProgramData', 'APPDATA': 'C:\\Users\\olegk\\AppData\\Roaming', 'ASL.LOG': 'Destination=file', 'COMMO...
+    │    │        │           └ <django.core.servers.basehttp.ServerHandler object at 0x000001CE651CDB80>
+    │    │        └ <django.contrib.staticfiles.handlers.StaticFilesHandler object at 0x000001CE64FC0250>
+    │    └ None
+    └ <django.core.servers.basehttp.ServerHandler object at 0x000001CE651CDB80>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\contrib\staticfiles\handlers.py", line 76, in __call__
+    return self.application(environ, start_response)
+           │    │           │        └ <bound method BaseHandler.start_response of <django.core.servers.basehttp.ServerHandler object at 0x000001CE651CDB80>>
+           │    │           └ {'ALLUSERSPROFILE': 'C:\\ProgramData', 'APPDATA': 'C:\\Users\\olegk\\AppData\\Roaming', 'ASL.LOG': 'Destination=file', 'COMMO...
+           │    └ <django.core.handlers.wsgi.WSGIHandler object at 0x000001CE634CB460>
+           └ <django.contrib.staticfiles.handlers.StaticFilesHandler object at 0x000001CE64FC0250>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\wsgi.py", line 133, in __call__
+    response = self.get_response(request)
+               │    │            └ <WSGIRequest: GET '/bboard/'>
+               │    └ <function BaseHandler.get_response at 0x000001CE63955940>
+               └ <django.core.handlers.wsgi.WSGIHandler object at 0x000001CE634CB460>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\base.py", line 130, in get_response
+    response = self._middleware_chain(request)
+               │    │                 └ <WSGIRequest: GET '/bboard/'>
+               │    └ <function convert_exception_to_response.<locals>.inner at 0x000001CE6353EE50>
+               └ <django.core.handlers.wsgi.WSGIHandler object at 0x000001CE634CB460>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.middleware.security.SecurityMiddleware object at 0x000001CE63535EE0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x000001CE6353EEE0>
+               │           └ <django.middleware.security.SecurityMiddleware object at 0x000001CE63535EE0>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.contrib.sessions.middleware.SessionMiddleware object at 0x000001CE64DBDC40>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x000001CE6353EF70>
+               │           └ <django.contrib.sessions.middleware.SessionMiddleware object at 0x000001CE64DBDC40>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <corsheaders.middleware.CorsMiddleware object at 0x000001CE63540310>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x000001CE6353E9D0>
+               │           └ <corsheaders.middleware.CorsMiddleware object at 0x000001CE63540310>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.middleware.common.CommonMiddleware object at 0x000001CE63540340>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x000001CE63542040>
+               │           └ <django.middleware.common.CommonMiddleware object at 0x000001CE63540340>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <debug_toolbar.middleware.DebugToolbarMiddleware object at 0x000001CE63540400>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\middleware.py", line 57, in __call__
+    response = toolbar.process_request(request)
+               │       │               └ <WSGIRequest: GET '/bboard/'>
+               │       └ <bound method Panel.process_request of <debug_toolbar.panels.history.panel.HistoryPanel object at 0x000001CE651E7B20>>
+               └ <debug_toolbar.toolbar.DebugToolbar object at 0x000001CE651E7880>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.versions.VersionsPanel object at 0x000001CE651E7AF0>>
+           └ <debug_toolbar.panels.history.panel.HistoryPanel object at 0x000001CE651E7B20>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method TimerPanel.process_request of <debug_toolbar.panels.timer.TimerPanel object at 0x000001CE651E7AC0>>
+           └ <debug_toolbar.panels.versions.VersionsPanel object at 0x000001CE651E7AF0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\timer.py", line 65, in process_request
+    return super().process_request(request)
+                                   └ <WSGIRequest: GET '/bboard/'>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.settings.SettingsPanel object at 0x000001CE651E7610>>
+           └ <debug_toolbar.panels.timer.TimerPanel object at 0x000001CE651E7AC0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method HeadersPanel.process_request of <debug_toolbar.panels.headers.HeadersPanel object at 0x000001CE651E7A90>>
+           └ <debug_toolbar.panels.settings.SettingsPanel object at 0x000001CE651E7610>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\headers.py", line 50, in process_request
+    return super().process_request(request)
+                                   └ <WSGIRequest: GET '/bboard/'>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.request.RequestPanel object at 0x000001CE651E7910>>
+           └ <debug_toolbar.panels.headers.HeadersPanel object at 0x000001CE651E7A90>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.sql.panel.SQLPanel object at 0x000001CE651E7940>>
+           └ <debug_toolbar.panels.request.RequestPanel object at 0x000001CE651E7910>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method StaticFilesPanel.process_request of <debug_toolbar.panels.staticfiles.StaticFilesPanel object at 0x000001CE651E...
+           └ <debug_toolbar.panels.sql.panel.SQLPanel object at 0x000001CE651E7940>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\staticfiles.py", line 117, in process_request
+    return super().process_request(request)
+                                   └ <WSGIRequest: GET '/bboard/'>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.templates.panel.TemplatesPanel object at 0x000001CE651E7730>>
+           └ <debug_toolbar.panels.staticfiles.StaticFilesPanel object at 0x000001CE651E79A0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.cache.CachePanel object at 0x000001CE651E7760>>
+           └ <debug_toolbar.panels.templates.panel.TemplatesPanel object at 0x000001CE651E7730>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.signals.SignalsPanel object at 0x000001CE651E74C0>>
+           └ <debug_toolbar.panels.cache.CachePanel object at 0x000001CE651E7760>
+  [Previous line repeated 1 more time]
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\logging.py", line 77, in process_request
+    return super().process_request(request)
+                                   └ <WSGIRequest: GET '/bboard/'>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <function convert_exception_to_response.<locals>.inner at 0x000001CE635420D0>
+           └ <debug_toolbar.panels.logging.LoggingPanel object at 0x000001CE651E76A0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.middleware.csrf.CsrfViewMiddleware object at 0x000001CE635404C0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x000001CE63542160>
+               │           └ <django.middleware.csrf.CsrfViewMiddleware object at 0x000001CE635404C0>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.contrib.auth.middleware.AuthenticationMiddleware object at 0x000001CE63540730>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x000001CE635421F0>
+               │           └ <django.contrib.auth.middleware.AuthenticationMiddleware object at 0x000001CE63540730>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.contrib.messages.middleware.MessageMiddleware object at 0x000001CE635F8B50>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x000001CE63542280>
+               │           └ <django.contrib.messages.middleware.MessageMiddleware object at 0x000001CE635F8B50>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.middleware.clickjacking.XFrameOptionsMiddleware object at 0x000001CE635D9160>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function BaseHandler._get_response at 0x000001CE63542310>
+               │           └ <django.middleware.clickjacking.XFrameOptionsMiddleware object at 0x000001CE635D9160>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x000001CE634CB460>>
+
+> File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               │                │         │                └ {}
+               │                │         └ ()
+               │                └ <WSGIRequest: GET '/bboard/'>
+               └ <function index at 0x000001CE64D7E430>
+
+  File "G:\it_local\classifieds_django3\samplesite\bboard\views.py", line 100, in index
+    context   = {'bbs': page.object_list,  'rc': RC, 'page': page, 'bbstotal': bbs, 'bbFilter': bbFilter}
+                                                 │                             │                └ <bboard.filters.BbFilter object at 0x000001CE65203760>
+                                                 │                             └ <QuerySet [<Bb: Bb object (76)>, <Bb: Bb object (73)>, <Bb: Bb object (72)>, <Bb: Bb object (71)>, <Bb: Bb object (42)>, <Bb:...
+                                                 └ <QuerySet [<Rubric: Недвижимость>, <Rubric: Транспорт>, <Rubric: Сельхозинвентарь>, <Rubric: Бытовая техника>, <Rubric: Мебел...
+
+NameError: name 'page' is not defined
+2022-10-21T21:25:52.656905+0300 ERROR, An error has been caught in function '_get_response', process 'MainProcess' (13412), thread 'Thread-1' (1772):
+Traceback (most recent call last):
+
+  File "C:\Program Files\Python39\lib\threading.py", line 912, in _bootstrap
+    self._bootstrap_inner()
+    │    └ <function Thread._bootstrap_inner at 0x0000026F5733B670>
+    └ <Thread(Thread-1, started daemon 1772)>
+
+  File "C:\Program Files\Python39\lib\threading.py", line 954, in _bootstrap_inner
+    self.run()
+    │    └ <function Thread.run at 0x0000026F5733B3A0>
+    └ <Thread(Thread-1, started daemon 1772)>
+
+  File "C:\Program Files\Python39\lib\threading.py", line 892, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {}
+    │    │        │    │        └ <Thread(Thread-1, started daemon 1772)>
+    │    │        │    └ (<socket.socket fd=1332, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 8000), raddr...
+    │    │        └ <Thread(Thread-1, started daemon 1772)>
+    │    └ <bound method ThreadingMixIn.process_request_thread of <django.core.servers.basehttp.WSGIServer object at 0x0000026F5B83B550>>
+    └ <Thread(Thread-1, started daemon 1772)>
+
+  File "C:\Program Files\Python39\lib\socketserver.py", line 683, in process_request_thread
+    self.finish_request(request, client_address)
+    │    │              │        └ ('127.0.0.1', 64308)
+    │    │              └ <socket.socket fd=1332, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 8000), raddr=...
+    │    └ <function BaseServer.finish_request at 0x0000026F59D51160>
+    └ <django.core.servers.basehttp.WSGIServer object at 0x0000026F5B83B550>
+
+  File "C:\Program Files\Python39\lib\socketserver.py", line 360, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+    │    │                   │        │               └ <django.core.servers.basehttp.WSGIServer object at 0x0000026F5B83B550>
+    │    │                   │        └ ('127.0.0.1', 64308)
+    │    │                   └ <socket.socket fd=1332, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0, laddr=('127.0.0.1', 8000), raddr=...
+    │    └ <class 'django.core.servers.basehttp.WSGIRequestHandler'>
+    └ <django.core.servers.basehttp.WSGIServer object at 0x0000026F5B83B550>
+
+  File "C:\Program Files\Python39\lib\socketserver.py", line 747, in __init__
+    self.handle()
+    │    └ <function WSGIRequestHandler.handle at 0x0000026F5A3298B0>
+    └ <django.core.servers.basehttp.WSGIRequestHandler object at 0x0000026F5BB95AF0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\servers\basehttp.py", line 176, in handle
+    self.handle_one_request()
+    │    └ <function WSGIRequestHandler.handle_one_request at 0x0000026F5A329940>
+    └ <django.core.servers.basehttp.WSGIRequestHandler object at 0x0000026F5BB95AF0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\servers\basehttp.py", line 201, in handle_one_request
+    handler.run(self.server.get_app())
+    │       │   │    │      └ <function WSGIServer.get_app at 0x0000026F5A328DC0>
+    │       │   │    └ <django.core.servers.basehttp.WSGIServer object at 0x0000026F5B83B550>
+    │       │   └ <django.core.servers.basehttp.WSGIRequestHandler object at 0x0000026F5BB95AF0>
+    │       └ <function BaseHandler.run at 0x0000026F5A314790>
+    └ <django.core.servers.basehttp.ServerHandler object at 0x0000026F5BB95D00>
+
+  File "C:\Program Files\Python39\lib\wsgiref\handlers.py", line 137, in run
+    self.result = application(self.environ, self.start_response)
+    │    │        │           │    │        │    └ <function BaseHandler.start_response at 0x0000026F5A314AF0>
+    │    │        │           │    │        └ <django.core.servers.basehttp.ServerHandler object at 0x0000026F5BB95D00>
+    │    │        │           │    └ {'ALLUSERSPROFILE': 'C:\\ProgramData', 'APPDATA': 'C:\\Users\\olegk\\AppData\\Roaming', 'ASL.LOG': 'Destination=file', 'COMMO...
+    │    │        │           └ <django.core.servers.basehttp.ServerHandler object at 0x0000026F5BB95D00>
+    │    │        └ <django.contrib.staticfiles.handlers.StaticFilesHandler object at 0x0000026F5B83BBB0>
+    │    └ None
+    └ <django.core.servers.basehttp.ServerHandler object at 0x0000026F5BB95D00>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\contrib\staticfiles\handlers.py", line 76, in __call__
+    return self.application(environ, start_response)
+           │    │           │        └ <bound method BaseHandler.start_response of <django.core.servers.basehttp.ServerHandler object at 0x0000026F5BB95D00>>
+           │    │           └ {'ALLUSERSPROFILE': 'C:\\ProgramData', 'APPDATA': 'C:\\Users\\olegk\\AppData\\Roaming', 'ASL.LOG': 'Destination=file', 'COMMO...
+           │    └ <django.core.handlers.wsgi.WSGIHandler object at 0x0000026F59D4B460>
+           └ <django.contrib.staticfiles.handlers.StaticFilesHandler object at 0x0000026F5B83BBB0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\wsgi.py", line 133, in __call__
+    response = self.get_response(request)
+               │    │            └ <WSGIRequest: GET '/bboard/'>
+               │    └ <function BaseHandler.get_response at 0x0000026F5A1D5940>
+               └ <django.core.handlers.wsgi.WSGIHandler object at 0x0000026F59D4B460>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\base.py", line 130, in get_response
+    response = self._middleware_chain(request)
+               │    │                 └ <WSGIRequest: GET '/bboard/'>
+               │    └ <function convert_exception_to_response.<locals>.inner at 0x0000026F59DBECA0>
+               └ <django.core.handlers.wsgi.WSGIHandler object at 0x0000026F59D4B460>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.middleware.security.SecurityMiddleware object at 0x0000026F5B76FE80>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x0000026F59DBEEE0>
+               │           └ <django.middleware.security.SecurityMiddleware object at 0x0000026F5B76FE80>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.contrib.sessions.middleware.SessionMiddleware object at 0x0000026F59DB5E50>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x0000026F59DBEF70>
+               │           └ <django.contrib.sessions.middleware.SessionMiddleware object at 0x0000026F59DB5E50>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <corsheaders.middleware.CorsMiddleware object at 0x0000026F59D5A250>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x0000026F59DBE9D0>
+               │           └ <corsheaders.middleware.CorsMiddleware object at 0x0000026F59D5A250>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.middleware.common.CommonMiddleware object at 0x0000026F59DC0370>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x0000026F59DC2040>
+               │           └ <django.middleware.common.CommonMiddleware object at 0x0000026F59DC0370>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <debug_toolbar.middleware.DebugToolbarMiddleware object at 0x0000026F59DC0430>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\middleware.py", line 57, in __call__
+    response = toolbar.process_request(request)
+               │       │               └ <WSGIRequest: GET '/bboard/'>
+               │       └ <bound method Panel.process_request of <debug_toolbar.panels.history.panel.HistoryPanel object at 0x0000026F5BC5FCD0>>
+               └ <debug_toolbar.toolbar.DebugToolbar object at 0x0000026F5BC5F0A0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.versions.VersionsPanel object at 0x0000026F5BC5FCA0>>
+           └ <debug_toolbar.panels.history.panel.HistoryPanel object at 0x0000026F5BC5FCD0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method TimerPanel.process_request of <debug_toolbar.panels.timer.TimerPanel object at 0x0000026F5BC5FC70>>
+           └ <debug_toolbar.panels.versions.VersionsPanel object at 0x0000026F5BC5FCA0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\timer.py", line 65, in process_request
+    return super().process_request(request)
+                                   └ <WSGIRequest: GET '/bboard/'>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.settings.SettingsPanel object at 0x0000026F5BC5F790>>
+           └ <debug_toolbar.panels.timer.TimerPanel object at 0x0000026F5BC5FC70>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method HeadersPanel.process_request of <debug_toolbar.panels.headers.HeadersPanel object at 0x0000026F5BC5FC40>>
+           └ <debug_toolbar.panels.settings.SettingsPanel object at 0x0000026F5BC5F790>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\headers.py", line 50, in process_request
+    return super().process_request(request)
+                                   └ <WSGIRequest: GET '/bboard/'>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.request.RequestPanel object at 0x0000026F5BC5FAC0>>
+           └ <debug_toolbar.panels.headers.HeadersPanel object at 0x0000026F5BC5FC40>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.sql.panel.SQLPanel object at 0x0000026F5BC5FAF0>>
+           └ <debug_toolbar.panels.request.RequestPanel object at 0x0000026F5BC5FAC0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method StaticFilesPanel.process_request of <debug_toolbar.panels.staticfiles.StaticFilesPanel object at 0x0000026F5BC5...
+           └ <debug_toolbar.panels.sql.panel.SQLPanel object at 0x0000026F5BC5FAF0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\staticfiles.py", line 117, in process_request
+    return super().process_request(request)
+                                   └ <WSGIRequest: GET '/bboard/'>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.templates.panel.TemplatesPanel object at 0x0000026F5BC5F190>>
+           └ <debug_toolbar.panels.staticfiles.StaticFilesPanel object at 0x0000026F5BC5FB50>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.cache.CachePanel object at 0x0000026F5BC5F610>>
+           └ <debug_toolbar.panels.templates.panel.TemplatesPanel object at 0x0000026F5BC5F190>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <bound method Panel.process_request of <debug_toolbar.panels.signals.SignalsPanel object at 0x0000026F5BC5F8B0>>
+           └ <debug_toolbar.panels.cache.CachePanel object at 0x0000026F5BC5F610>
+  [Previous line repeated 1 more time]
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\logging.py", line 77, in process_request
+    return super().process_request(request)
+                                   └ <WSGIRequest: GET '/bboard/'>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\debug_toolbar\panels\__init__.py", line 193, in process_request
+    return self.get_response(request)
+           │    │            └ <WSGIRequest: GET '/bboard/'>
+           │    └ <function convert_exception_to_response.<locals>.inner at 0x0000026F59DC20D0>
+           └ <debug_toolbar.panels.logging.LoggingPanel object at 0x0000026F5BC5F100>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.middleware.csrf.CsrfViewMiddleware object at 0x0000026F59DC04F0>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x0000026F59DC2160>
+               │           └ <django.middleware.csrf.CsrfViewMiddleware object at 0x0000026F59DC04F0>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.contrib.auth.middleware.AuthenticationMiddleware object at 0x0000026F59DC0730>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x0000026F59DC21F0>
+               │           └ <django.contrib.auth.middleware.AuthenticationMiddleware object at 0x0000026F59DC0730>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.contrib.messages.middleware.MessageMiddleware object at 0x0000026F59E78B50>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function convert_exception_to_response.<locals>.inner at 0x0000026F59DC2280>
+               │           └ <django.contrib.messages.middleware.MessageMiddleware object at 0x0000026F59E78B50>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <django.middleware.clickjacking.XFrameOptionsMiddleware object at 0x0000026F59E58160>
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\utils\deprecation.py", line 117, in __call__
+    response = response or self.get_response(request)
+               │           │    │            └ <WSGIRequest: GET '/bboard/'>
+               │           │    └ <function BaseHandler._get_response at 0x0000026F59DC2310>
+               │           └ <django.middleware.clickjacking.XFrameOptionsMiddleware object at 0x0000026F59E58160>
+               └ None
+
+  File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\exception.py", line 47, in inner
+    response = get_response(request)
+               │            └ <WSGIRequest: GET '/bboard/'>
+               └ <bound method BaseHandler._get_response of <django.core.handlers.wsgi.WSGIHandler object at 0x0000026F59D4B460>>
+
+> File "G:\it_local\classifieds_django3\venv_classd\lib\site-packages\django\core\handlers\base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               │                │         │                └ {}
+               │                │         └ ()
+               │                └ <WSGIRequest: GET '/bboard/'>
+               └ <function index at 0x0000026F5B5FE3A0>
+
+  File "G:\it_local\classifieds_django3\samplesite\bboard\views.py", line 98, in index
+    page = paginator.get_page(page_num)
+                              └ 1
+
+NameError: name 'paginator' is not defined

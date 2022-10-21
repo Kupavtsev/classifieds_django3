@@ -37,7 +37,7 @@ from rest_framework.decorators import api_view          # we dont need it with C
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-# from loguru import logger
+from loguru import logger
 
 # from django.http import HttpResponse
 
@@ -50,7 +50,7 @@ from .filters import BbFilter, BbFilterRubrics
 from bboard.api.serializers import RubricSerializer
 
 
-# logger.add('logs/debug_views.log', format="{time} {level}, {message}", level="DEBUG", rotation='100 KB')
+logger.add('logs/debug_views.log', format="{time} {level}, {message}", level="DEBUG", rotation='100 KB')
 
 # SQL filters
 # f1
@@ -80,6 +80,7 @@ RC = Rubric.objects.annotate(Count('bb'))
 #           ========================================= 
 # 1.1 main
 # @cache_page(120)
+@logger.catch
 def index(request):
     test_cookie(request)
     # В зависимоти от контекста запроса, render ведет себя по разному
