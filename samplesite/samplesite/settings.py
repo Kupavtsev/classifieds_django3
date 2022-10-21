@@ -229,3 +229,53 @@ EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'filters': {
+        'require_debug_false': {
+        '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+        ' () ': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'formatters': {
+        'simple': {
+        'format': '[%(asctime)s] %(levelname)s: %(message)s',
+        'datefmt': '%Y.%m.%d %H:%M:%S',
+        }
+    },
+    'handlers': {
+        'console_dev': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'filters': ['require_debug_true'],
+            },
+        'console_prod': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+        },
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'django-site.log'),
+            'maxBytes': 1048576,
+            'backupCount': 10,
+            'formatter': 'simple',
+        }
+    },
+    'loggers': {
+        'dj ango': {
+        'handlers': ['console_dev', 'console_prod'],
+        },
+        'dj ango.server': {
+        'handlers': ['file'],
+        'level': 'INFO',
+        'propagate': True,
+        },
+    }
+}
