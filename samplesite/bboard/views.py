@@ -37,7 +37,7 @@ from rest_framework.decorators import api_view          # we dont need it with C
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from loguru import logger
+# from loguru import logger
 
 # from django.http import HttpResponse
 
@@ -50,7 +50,7 @@ from .filters import BbFilter, BbFilterRubrics
 from bboard.api.serializers import RubricSerializer
 
 
-logger.add('logs/debug_views.log', format="{time} {level}, {message}", level="DEBUG", rotation='100 KB')
+# logger.add('logs/debug_views.log', format="{time} {level}, {message}", level="DEBUG", rotation='100 KB')
 
 # SQL filters
 # f1
@@ -80,7 +80,6 @@ RC = Rubric.objects.annotate(Count('bb'))
 #           ========================================= 
 # 1.1 main
 # @cache_page(120)
-@logger.catch
 def index(request):
     test_cookie(request)
     # В зависимоти от контекста запроса, render ведет себя по разному
@@ -115,6 +114,10 @@ class BbIndexView(ArchiveIndexView):
         context = super().get_context_data(*args, **kwargs)
         context['rc'] = RC
         return context
+
+
+
+
 
 
 #           ========================================= 
@@ -174,6 +177,11 @@ class BbByRubricViewListView(ListView):
         return context
 
 
+
+
+
+
+
 #           ========================================= 
 #           ---===3 DETAIL VIEW OF EACH PRODUCT===---
 #           ========================================= 
@@ -186,6 +194,10 @@ class BbDetailView(DetailView):
         context['rc'] = RC
         return context
         # render('bboard/index.html') 
+
+
+
+
 
 #           ========================================= 
 #           ---===   4 Add new Advertisment    ===---
@@ -252,6 +264,11 @@ class BbAddFormView(LoginRequiredMixin, FormView):
                     kwargs={'rubric_id': self.object.cleaned_data['rubric'].pk})
 
 
+
+
+
+
+
 #           ========================================= 
 #           ---===    5 EDIT AD FORM - CLASS   ===---
 #           ========================================= 
@@ -313,6 +330,11 @@ class BbDeleteView(LoginRequiredMixin, DeleteView):
         return context
 
 
+
+
+
+
+
 #           ========================================= 
 #           ---===            6 DATES          ===---
 #           ========================================= 
@@ -372,6 +394,12 @@ class BbDayDetailView(DateDetailView):
         context['rc'] = RC
         return context
 
+
+
+
+
+
+
 #           ========================================= 
 #           ---=== 7 Edit/Validation in forms  ===---
 #           ========================================= 
@@ -416,6 +444,12 @@ def rubrics(request):
         return HttpResponseForbidden('Вы не имеете допуска к списку рубрик')
 
 
+
+
+
+
+
+
 #           ========================================= 
 #           ---===  Редактировать объявления   ===---
 #           =========================================
@@ -439,12 +473,22 @@ def bbs(request, rubric_id):
         # redirect_to_login(reverse('bbs', rubric_id))
 
 
+
+
+
+
+
 #           ========================================= 
 #           ---===  8 Password operations      ===---
 #           ========================================= 
 # 8.1
 class PassChg(PasswordChangeView):
     template_name: str = 'registration/password_change_my.html'
+
+
+
+
+
 
 
 #           ========================================= 
@@ -484,6 +528,11 @@ def formset_processing(request):
         return render(request, 'bboard/formset.html', context)
 
 
+
+
+
+
+
 #           ========================================= 
 #           ---===      10 Private Cabinet     ===---
 #           =========================================
@@ -502,6 +551,13 @@ class PrivateCabinet(ListView):
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(user = self.request.user).order_by('published')
+
+
+
+
+
+
+
 
 
 #           ========================================= 
@@ -542,6 +598,9 @@ def api_rubrics_detail(request, pk):
     elif request.method == 'DELETE':
         rubric.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
 
 
 #           ========================================= 

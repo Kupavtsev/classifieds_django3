@@ -1,6 +1,6 @@
 # from django.views.decorators.cache import cache_page
 from django.urls import path
-from .models            import Bb
+from .models import Bb
 
 from bboard.assets.emails_handler import mail_send
 from . import views
