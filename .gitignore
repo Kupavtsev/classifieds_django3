@@ -26,7 +26,7 @@ MANIFEST
 # Django stuff:
 *.log
 local_settings.py
-db.sqlite3
+samplesite/db.sqlite3
 
 # Environments
 .env

@@ -70,7 +70,7 @@ r2 = Rubric.objects.prefetch_related(pr2).get(pk=2)
 # if not rubricsAll:
 #     rubricsAll = Rubric.objects.all()
 #     cache.set('rubrics_all', rubricsAll, 60*6)
-rubricsAll = Rubric.objects.all()
+rubricsAll = Rubric.objects.only('name')
 
 RC = Rubric.objects.annotate(Count('bb'))
 
