@@ -7,17 +7,19 @@
 <html>
 
 <head>
-    <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAZZ5EAAAAAACuIugBEmccAJZHMABhzowAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERERERERERERERERERETMzERERERFVRDMzERERFVVUQzMxEREVVVRDMzERERERERERERERAAIlVURDEREAAiVVREMREQAAIlVUQxEREAACJVVREREQAAAiVVEREREAAAJVEREREREAAhERERERERERERERERERERERERH//wAA//8AAPw/AADwDwAA4AcAAOAHAADAAwAAgAEAAEACAACAAQAA4AcAAOAHAADwDwAA/D8AAP//AAD//wAA" rel="icon" type="image/x-icon" />
+    <!-- <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAZZ5EAAAAAACuIugBEmccAJZHMABhzowAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERERERERERERERERERERERERETMzERERERFVRDMzERERFVVUQzMxEREVVVRDMzERERERERERERERAAIlVURDEREAAiVVREMREQAAIlVUQxEREAACJVVREREQAAAiVVEREREAAAJVEREREREAAhERERERERERERERERERERERERH//wAA//8AAPw/AADwDwAA4AcAAOAHAADAAwAAgAEAAEACAACAAQAA4AcAAOAHAADwDwAA/D8AAP//AAD//wAA" rel="icon" type="image/x-icon" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=l, shrink-to-fit=no">
     <meta charset="UTF-8">
     {% bootstrap_css %}
-    {% bootstrap_javascript jquery=True %}
+    <!-- <link rel="stylesheet" type="text/css" href="{% static "main/style.css" %}"> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'bboard/style.css' %}">
+    {% bootstrap_javascript jquery='slim' %}
     <title>{% block title %}Главная{% endblock %} :: Доска объявлений</title>
 </head>
 
-<body>
-    <header id="pageHeader">
+<body class="container-fluid">
+    <header id="pageHeader" class="mb-4">
         
-        <link rel="stylesheet" type="text/css" href="{% static 'bboard/style.css' %}">
         
         <a href="{% url 'bboard:index' %}"><b>Главная</b></а>
         {% if 'bboard.add_bb' in perms %}
@@ -34,10 +36,32 @@
 
     </header>
 
+
+    <!-- <div class="row">
+        <ul class="col nav justify-content-end border">
+            <li class="nav-item"><a class="nav-link" href="#">Регистрация</a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                    aria-expanded="Га1зе">Профиль</а>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Moи объявления</а>
+                        <a class="dropdown-item" href="#">Изменить личные данные</а>
+                        <a class="dropdown-item" href="#">Изменить пароль</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Выйти</а>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Удалить</а>
+                    </div>
+            </li>
+            <li class="nav-item"><a class=”nav-link" href="#">Вход</a></li>
+        </ul>
+    </div> -->
+
+
 {# Menu with Rubrics #}
 {# {% cache 120 mainNav %} #}
     <nav id="mainNav">
-        <hl>Объявления</hl>
+        <hl >Объявления</hl>
         <div id="rubrics">
             {% for rubric in rc %}
                 <a href="{{ rubric.get_absolute_url }}">
