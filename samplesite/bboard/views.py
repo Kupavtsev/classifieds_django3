@@ -1,5 +1,5 @@
 import re
-from tkinter import EXCEPTION
+# from tkinter import EXCEPTION
 from django.contrib import messages
 from xml.dom import ValidationErr
 from django.db.models import Count, OuterRef, Exists, Prefetch

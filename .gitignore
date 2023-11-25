@@ -42,7 +42,7 @@ venv.bak/
 # MINE
 practice/
 
-venv_classd/
+samplesite/venv/
 samplesite/bboard/__pycache__
 samplesite/bboard/api/__pycache__/
 samplesite/bboard/migrations/__pycache__
@@ -61,3 +61,54 @@ cmd.exe.lnk
 
 # STATIC
 static/
+
+
+data/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
+*.code-workspace
