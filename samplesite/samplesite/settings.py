@@ -136,9 +136,9 @@ CACHES = {
 
 #     # 'default': {
 #     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#     #     'NAME': 'djangoreactcrm',
+#     #     'NAME': 'bboard',
 #     #     'USER': 'postgres',
-#     #     'PASSWORD': '258963',
+#     #     'PASSWORD': '32167',
 #     #     'HOST': env('DB_HOST'),
 #     #     # 'HOST': 'localhost',
 #     #     'PORT': env('DB_PORT'),

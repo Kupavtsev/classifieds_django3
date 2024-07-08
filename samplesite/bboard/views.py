@@ -58,11 +58,11 @@ subquery = Exists(Bb.objects.filter(rubric=OuterRef('pk'), price__gt=100000))
 # for r in Rubric.objects.annotate(is_expensive=subquery).filter(is_expensive=True): print(r.name)
 # f2
 pr1 = Prefetch('bb_set', queryset=Bb.objects.order_by('-title'))
-r = Rubric.objects.prefetch_related(pr1).first()
+# r = Rubric.objects.prefetch_related(pr1).first()
 # for bb in r.bb_set.all(): print(bb.price, end=' ')
 # f3
 pr2 = Prefetch('bb_set', queryset=Bb.objects.filter(price__gt=1000), to_attr='expensive')
-r2 = Rubric.objects.prefetch_related(pr2).get(pk=2)
+# r2 = Rubric.objects.prefetch_related(pr2).get(pk=2)
 # for bb in r2.expensive: print(bb.price)
 
 # GLOBALS
@@ -73,7 +73,7 @@ r2 = Rubric.objects.prefetch_related(pr2).get(pk=2)
 rubricsAll = Rubric.objects.only('name')
 
 RC = Rubric.objects.annotate(Count('bb'))
-
+# RC = ''
 
 #           ========================================= 
 #           ---===          1 MAIN PAGE        ===---
@@ -155,7 +155,7 @@ class BbByRubricView(SingleObjectMixin, ListView):
         context['bbs'] = context['object_list']         # по умолчанию хранит записи из ListView
         context['current_rubric'] = self.object         # берем рубрику из get
         context['rc'] = RC
-        context['gt1000'] = r2.expensive
+        # context['gt1000'] = r2.expensive
         context['bbFilter'] = BbFilterRubrics(self.request.GET, queryset=self.get_queryset())
         return context
 

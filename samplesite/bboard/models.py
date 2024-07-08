@@ -33,7 +33,7 @@ class Bb(models.Model):
     STATUS = (('Куплю', 'Куплю'), ('Продам', 'Продам'), ('Обменяю', 'Обменяю'))
 
     title = models.CharField(
-                        max_length=50, verbose_name='Товар', 
+                        max_length=50, verbose_name='Название', 
                         validators=[validators.MinLengthValidator(get_min_length)],
                         # error_messages={'invalid': 'Минимальная длинна 5, максимальная 50'}
                                     )
